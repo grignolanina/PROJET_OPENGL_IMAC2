@@ -4,6 +4,16 @@ cmake_minimum_required(VERSION 3.20)
 # ---Choose project name---
 project(OpenGL-TPs-Template)
 
+# ---Setup Testing---
+# include(FetchContent)
+# FetchContent_Declare(
+#     doctest
+#     GIT_REPOSITORY https://github.com/doctest/doctest
+#     GIT_TAG b7c21ec5ceeadb4951b00396fc1e4642dd347e5f
+# )
+# FetchContent_MakeAvailable(doctest)
+# target_link_libraries(${PROJECT_NAME} PRIVATE doctest::doctest)
+
 # ---Add p6 library---
 include(FetchContent)
 set(P6_RAW_OPENGL_MODE ON CACHE BOOL "")
@@ -49,3 +59,4 @@ endfunction(add_exercise)
 
 add_exercise(TP3_exo1_triangle_blanc)
 add_exercise(TP3_exo2_triangle_couleurs)
+add_exercise(src)
