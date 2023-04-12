@@ -7,19 +7,19 @@
 
 
 
-static constexpr glm::vec2 speedMax= glm::vec2(0.02f, 0.02f);
+static constexpr glm::vec3 speedMax= glm::vec3(0.02f, 0.02f, 0.02f);
 static constexpr float maxForce =0.01f;
 static constexpr float cohesionWeight = 0.5f;
 
 Boid::Boid():
-m_pos(glm::vec2(0., 0.)),
+m_pos(glm::vec3(0., 0., 0.)),
 m_color(glm::vec3(1., 1., 1.)),
 m_size(0.02),
-m_speed(0.02)
+m_speed(glm::vec3(0.02, 0.02, 0.02))
 {
 }
 
-Boid::Boid(glm::vec2 pos, glm::vec3 color, float size, glm::vec2 speed):
+Boid::Boid(glm::vec3 pos, glm::vec3 color, float size, glm::vec3 speed):
 m_pos(pos),
 m_color(color),
 m_size(size),
@@ -30,11 +30,11 @@ m_speed(speed)
 
 Boid::Boid(float aspectRatio)
     : 
-    m_pos(glm::vec2{p6::random::number(-aspectRatio, aspectRatio), p6::random::number(-1, 1)}), 
+    m_pos(glm::vec3{p6::random::number(-aspectRatio, aspectRatio), p6::random::number(-1, 1), p6::random::number(-2, 2)}), 
     m_color(glm::vec3{p6::random::number(0, 1), p6::random::number(0, 1), p6::random::number(0, 1)}), 
     // m_color(glm::vec3{0., 0., 1.}), 
     m_size(0.02), 
-    m_speed(p6::random::number(0., 0.02), p6::random::number(0., 0.02))
+    m_speed(p6::random::number(0., 0.02), p6::random::number(0., 0.02), p6::random::number(0., 0.02))
 {
 }
 
@@ -72,6 +72,12 @@ void Boid::stayInWindows(p6::Context& ctx){
     if(m_pos.y > 1-m_size){
         m_speed.y -=0.05;
     }
+    if(m_pos.z < -1+m_size){
+        m_speed.z += 0.05;
+    }
+    if(m_pos.z > 1-m_size){
+        m_speed.z -=0.05;
+    }
 }
 
 
@@ -79,7 +85,7 @@ void Boid::stayInWindows(p6::Context& ctx){
 
 void Boid::separationBoids(std::vector<Boid>& boidsTab, float sRadius)
 {
-    glm::vec2 newDisplacement{0.0f, 0.0f};
+    glm::vec3 newDisplacement{0.0f, 0.0f, 0.0f};
     int count = 0;
     for (auto& elem : boidsTab)
     {
@@ -90,7 +96,7 @@ void Boid::separationBoids(std::vector<Boid>& boidsTab, float sRadius)
 
         if (distance < sRadius)
         {
-                glm::vec2 difference = glm::normalize(this->m_pos-elem.m_pos);
+                glm::vec3 difference = glm::normalize(this->m_pos-elem.m_pos);
                 difference /= distance;
                 newDisplacement += difference;
                 count++;
@@ -108,7 +114,7 @@ void Boid::separationBoids(std::vector<Boid>& boidsTab, float sRadius)
 
 void Boid::cohesionBoids(std::vector<Boid>& boidsTab, float cRadius)
 {
-    glm::vec2 newPosition{0.0f, 0.0f};
+    glm::vec3 newPosition{0.0f, 0.0f, 0.0f};
     int count = 0;
 
     for (auto& elem : boidsTab)
@@ -137,7 +143,7 @@ void Boid::cohesionBoids(std::vector<Boid>& boidsTab, float cRadius)
 
 void Boid::alignmentBoids(std::vector<Boid>& boidsTab, float aRadius)
 {
-    glm::vec2 newVelocity{0.0f, 0.0f};
+    glm::vec3 newVelocity{0.0f, 0.0f, 0.0f};
     int count = 0;
 
     for (auto& elem : boidsTab)
@@ -170,7 +176,7 @@ Boid randomBoids(float aspectRatio){
 
 
 void Boid::randomPos(float aspectRatio){
-    this->m_pos = glm::vec2({p6::random::number(-aspectRatio, aspectRatio), p6::random::number(-1, 1)});
+    this->m_pos = glm::vec3({p6::random::number(-aspectRatio, aspectRatio), p6::random::number(-1, 1), p6::random::number(-2, 2)});
 } 
     
 void Boid::randomColor(){
@@ -179,5 +185,5 @@ void Boid::randomColor(){
 
 
 void Boid::randomSpeed(){
-    this->m_speed = glm::vec2(p6::random::number(0., 0.02), p6::random::number(0., 0.02));
+    this->m_speed = glm::vec3(p6::random::number(0., 0.02), p6::random::number(0., 0.02), p6::random::number(0., 0.02));
 }

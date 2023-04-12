@@ -5,10 +5,10 @@
 
 class Boid{
 	private:
-	glm::vec2 m_pos;
+	glm::vec3 m_pos;
 	glm::vec3 m_color;
 	float m_size;
-	glm::vec2 m_speed;	
+	glm::vec3 m_speed;	
 
 	public :
 	/// \brief default constructor
@@ -19,11 +19,11 @@ class Boid{
 	/// \param color color of boid
 	/// \param size size of boid
 	/// \param speed speed of boid
-	Boid(glm::vec2 pos, glm::vec3 color, float size, glm::vec2 speed);
+	Boid(glm::vec3 pos, glm::vec3 color, float size, glm::vec3 speed);
 
 	/// \brief constructor random
 	/// \param aspectRatio window ratio
-	explicit Boid(float aspecRatio);
+	explicit Boid(float aspectRatio);
 
 	/// \brief destructor
 	// ~Boid();

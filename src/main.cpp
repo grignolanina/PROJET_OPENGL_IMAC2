@@ -21,11 +21,6 @@ int main()
     auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
     ctx.maximize_window();
 
-    // std::vector<Boid> boidsTab;
-    // for(int i = 0; i<50; i++){
-    //     Boid T(ctx.aspect_ratio());
-    //     boidsTab.push_back(T);
-    // }
     std::vector<Boid> boidsTab;
     for(int i = 0; i<50; i++){
         // Boid T = randomBoids(ctx.aspect_ratio());
@@ -61,6 +56,7 @@ int main()
             boidsTab[i].drawBoid(ctx);
             boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
         }   
+        
     };
 
 
