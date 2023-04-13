@@ -1,11 +1,9 @@
 #include "boids.hpp"
-#include <stdlib.h>
+#include <cstdlib>
+// #include <cstdlib.h>
 #include "glm/geometric.hpp"
 #include "p6/p6.h"
-#include "glm/ext/quaternion_geometric.hpp"
-#include "glm/ext/scalar_constants.hpp"
 #include "glm/fwd.hpp"
-#include "glm/gtc/random.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
 
@@ -49,7 +47,7 @@ void Boid::drawBoid(p6::Context& ctx) const
     ctx.use_stroke = false;
 }
 
-void Boid::drawBoid3D(p6::Context &ctx, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix){
+void Boid::drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix){
 
     glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -3.f}); // Translation
     // // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(this->m_speed)); // Translation * Rotation
@@ -194,9 +192,8 @@ Boid randomBoids(float aspectRatio){
 }
 
 
-glm::vec3 Boid::randomPos(float aspectRatio){
+void Boid::randomPos(float aspectRatio){
     this->m_pos = glm::vec3({p6::random::number(-aspectRatio, aspectRatio), p6::random::number(-1, 1), p6::random::number(-2, 2)});
-    return this->m_pos;
 } 
     
 void Boid::randomColor(){
@@ -204,6 +201,6 @@ void Boid::randomColor(){
 }
 
 
-glm::vec3 Boid::randomSpeed(){
+void Boid::randomSpeed(){
     this->m_speed = glm::vec3(p6::random::number(0., 0.02), p6::random::number(0., 0.02), p6::random::number(0., 0.02));
 }

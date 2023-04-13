@@ -37,7 +37,7 @@ class Boid{
 	/// \param ctx the p6 context of creation
 	void drawBoid(p6::Context& ctx) const;
 
-	void drawBoid3D(p6::Context &ctx, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix);
+	void drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix);
 
 
 	/// \brief update behavior and position of all boids in the tab
@@ -69,13 +69,13 @@ class Boid{
 
 	/// \brief change pos of one boid randomly
 	/// \param aspectRatio windows ratio
-	glm::vec3 randomPos(float aspectRatio);
+	void randomPos(float aspectRatio);
 
 	///\brief change color of one boid randomly
 	void randomColor();
 
 	///\brief change speed of one boid randomly
-	glm::vec3 randomSpeed();
+	void randomSpeed();
 
 };
 

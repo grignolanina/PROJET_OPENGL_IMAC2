@@ -3,10 +3,8 @@
 #include <iostream>
 #include <vector>
 #include "glimac/sphere_vertices.hpp"
-#include "glm/ext/quaternion_geometric.hpp"
-#include "glm/ext/scalar_constants.hpp"
+
 #include "glm/fwd.hpp"
-#include "glm/gtc/random.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
 #include "p6/p6.h"
@@ -220,7 +218,7 @@ int main()
             // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
             // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-            boidsTab[i].drawBoid3D(ctx, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+            boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
 
             glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
@@ -232,6 +230,7 @@ int main()
         glBindTexture(GL_TEXTURE_2D, 0);
 
     };
+    
     ctx.start();
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
