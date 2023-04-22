@@ -24,6 +24,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(p6)
 
+# ---Add tinyobjloader library---
+add_subdirectory(tinyobjloader)
+
 # ---Create a target for each exercise---
 function(add_exercise EXERCISE_NAME)
     set(TARGET_NAME ${EXERCISE_NAME}_exe)
@@ -48,6 +51,9 @@ function(add_exercise EXERCISE_NAME)
     # ---Link p6 library---
     target_link_libraries(${TARGET_NAME} PRIVATE p6::p6)
 
+    # ---Link tinyobjloader library---
+    target_link_libraries(${TARGET_NAME} PRIVATE tinyobjloader)
+
     # ---Set the output folder---
     set_target_properties(${TARGET_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${EXERCISE_NAME})
@@ -57,6 +63,6 @@ function(add_exercise EXERCISE_NAME)
     Cool__target_copy_folder(${TARGET_NAME} ${EXERCISE_NAME}/shaders shaders)
 endfunction(add_exercise)
 
-add_exercise(TP3_exo1_triangle_blanc)
-add_exercise(TP3_exo2_triangle_couleurs)
 add_exercise(src)
+add_exercise(testTinyObjLoader)
+add_exercise(test_project)

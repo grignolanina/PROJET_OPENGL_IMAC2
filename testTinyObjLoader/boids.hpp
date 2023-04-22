@@ -9,7 +9,6 @@ class Boid{
 	glm::vec3 m_color;
 	float m_size;
 	glm::vec3 m_speed;	
-	
 
 	public :
 	/// \brief default constructor
