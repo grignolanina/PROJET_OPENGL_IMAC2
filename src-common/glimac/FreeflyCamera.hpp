@@ -5,6 +5,7 @@
 #include "p6/p6.h"
 
 
+
 class Freefly {
 	private:
 	glm::vec3 m_Position; //camera position
@@ -14,6 +15,7 @@ class Freefly {
 	glm::vec3 m_FrontVector; //vecteur F
 	glm::vec3 m_LeftVector; //vecteur L
 	glm::vec3 m_UpVector; //vecteur U
+
 
 	void computeDirectionVectors();
 

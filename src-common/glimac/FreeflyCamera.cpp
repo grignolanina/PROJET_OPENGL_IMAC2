@@ -1,5 +1,5 @@
 #include "FreeflyCamera.hpp"
-#include "glimac/FreeflyCamera.hpp"
+
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/trigonometric.hpp"
@@ -21,8 +21,10 @@ void Freefly::computeDirectionVectors(){
 }
 
 void Freefly::moveLeft(float t){
+	// m_Position += t*m_LeftVector;
 	m_Position += t*m_LeftVector;
-	computeDirectionVectors();
+
+    computeDirectionVectors();
 }
 void Freefly::moveFront(float t){
 	m_Position += t*m_FrontVector;

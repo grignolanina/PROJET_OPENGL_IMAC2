@@ -3,7 +3,8 @@
 #include <iostream>
 #include <vector>
 #include "glimac/sphere_vertices.hpp"
-#include "glimac/FreeflyCamera.hpp"
+#include "camera.hpp"
+#include "player.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
@@ -138,21 +139,25 @@ int main()
 
     //creation cam & initialisation des mouvements
     // TrackballCamera camera(5, 0, 0);
-    Freefly camera;
+    
+    Player player;
+    Camera camera(player);
     bool right = false;
     bool left = false;
     bool up = false;
     bool down = false;
+    bool jump = false;
 
 
 
 
     ctx.update = [&](){
     // ctx.background(p6::NamedColor::Blue);
-
-        cameraOption(camera, left, right,  up, down,ctx);
-        glm::mat4 viewMatrix = camera.getViewMatrix();
+        
+        cameraOption(camera, left, right,  up, down,jump, ctx);
+        glm::mat4 viewMatrix = camera.update();
         Shader.use();
+
         glClearColor(0.0f, 0.1f, 0.6f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -167,6 +172,8 @@ int main()
         MVMatrix = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
         MVMatrix = viewMatrix*MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        player.drawPlayer( viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+
 
         // //mise en place texture terre
         // // glUniform1i(uTextTerre,0);
