@@ -19,33 +19,45 @@ int main()
     auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
     ctx.maximize_window();
 
-
-
-
-    // float radius = 0.02;
-    float sRadius = 0.05;
-    float cRadius = 0.2;
-    float aRadius = 0.1;
-    int nbBoids = 20;
-
     //load shaders
-    p6::Shader Shader = p6::load_shader("shaders/3Dboids.vs.glsl", "shaders/3Dboids.fs.glsl");
+    p6::Shader Shader = p6::load_shader("shaders/objText.vs.glsl", "shaders/objText.fs.glsl");
 
     //recup variable uniforme
     GLint uMVPMatrix    = glGetUniformLocation(Shader.id(), "uMVPMatrix");
     GLint uMVMatrix     = glGetUniformLocation(Shader.id(), "uMVMatrix");
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
 
-    Model perso = Model();
-    perso.loadModel("personnage.obj");
-    perso.setVbo();
+    GLint uTextIle = glGetUniformLocation(Shader.id(), "uTextIle");
+
+    // img::Image img_ile = p6::load_image_buffer("assets/textures/ile.png");
+
+    Texture ileTxt = Texture("assets/textures/ile.png");
+
+
+
+    Model ile = Model(ileTxt);
+    ile.loadModel("ile.obj");
+    ile.setVbo();
 
 
     //oprion pour voir les tests en profondeur?
     glEnable(GL_DEPTH_TEST);
 
+    // GLuint textureIle;
+    // glGenTextures(1, &textureIle);
+    // glActiveTexture(GL_TEXTURE0); // la texture textureTerre est bindée sur l'unité GL_TEXTURE0
+    // glBindTexture(GL_TEXTURE_2D, textureIle);
 
-    perso.setVao();
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_ile.width(), img_ile.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_ile.data());
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // //debind text
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, 0);
+
+
+    ile.setVao();
 
     //calcul des differentes matrices necessaire pour les shaders
     glm::mat4 ProjMatrix;
@@ -65,48 +77,23 @@ int main()
 
         //bind vao
         // glBindVertexArray(vao);
+        glUniform1i(uTextIle, 0);
+
 
         // //TERRE
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., 0., -5.));
-        MVMatrix = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
+        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -2., -5.));
+        // MVMatrix = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-        ImGui::Begin("Params");
-        ImGui::SliderInt("Nb boids",&nbBoids, 0, 51, "%.3f", 0 );
-        // ImGui::SliderFloat("Size", &radius, 0.f, 0.1f, "%.3f", 0); 
-        ImGui::SliderFloat("Separation", &sRadius, 0.f, 0.1f, "%.3f", 0); 
-        ImGui::SliderFloat("Cohesion", &cRadius, 0.f, 0.5f, "%.3f", 0); 
-        ImGui::SliderFloat("Alignement", &aRadius, 0.f, 0.5f, "%.3f", 0); 
-        ImGui::End();
-
-
-        // for(int i = 0; i<nbBoids; i++){
-
-        //     boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
-
-        //     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-        //     boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
-        // }
 
         glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
         glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
         glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-        perso.draw();
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, textureIle);
 
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -2., -5.));
-        MVMatrix = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
-        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-
-         glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        // perso2.draw();
-
-
-        // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        ile.draw();
 
         
         //debind vao
@@ -116,6 +103,9 @@ int main()
     };
     
     ctx.start();
+
+    // glDeleteTextures(1, &textureIle);
+
 
     
 

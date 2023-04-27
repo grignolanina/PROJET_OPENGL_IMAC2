@@ -2,6 +2,8 @@
 
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
+#include "texture.hpp"
+
 
 #include <glimac/common.hpp>
 
@@ -13,7 +15,7 @@ protected:
     GLuint m_vao; /*!< vao of the model*/
     // GLuint m_ibo; /*!< ibo of the model*/
     // bool m_isIbo = false; /*!< Boolean that shows if there is an ibo or not */
-    // rendering::Texture m_texture; /*!< texture of the model*/
+    Texture m_texture; /*!< texture of the model*/
     std::vector<glimac::ShapeVertex> m_vertices; /*!< Vector that contains the vertices (position, texture, normals) */
     std::vector<int> m_index; /*!< Number of indices to draw */
     GLsizei m_vertexCount; /*!< Number of vertices to draw */
@@ -24,9 +26,9 @@ public:
     *  \brief Constructor of the Model class
     *  \param texture The texture of the model
     */
-    // Model(rendering::Texture texture):
-    //     m_texture(texture)
-    //     {}
+    Model(Texture texture):
+        m_texture(texture)
+        {}
     Model() = default;
     
     /*!
@@ -44,7 +46,7 @@ public:
     */
     void draw(){
         glBindVertexArray(m_vao);
-        // glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
+        glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
         // if(m_isIbo){
         //     glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT,0);
         // }

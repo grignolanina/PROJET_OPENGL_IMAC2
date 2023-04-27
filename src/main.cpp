@@ -53,13 +53,16 @@ int main()
     p6::Shader Shader = p6::load_shader("shaders/3Dboids.vs.glsl", "shaders/3Dboids.fs.glsl");
 
     // //load texture
-    // img::Image img_terre = p6::load_image_buffer("assets/textures/EarthMap.jpg");
-    // img::Image img_lune = p6::load_image_buffer("assets/textures/MoonMap.jpg");
+    img::Image img_terre = p6::load_image_buffer("assets/textures/test.jpg");
+    img::Image img_lune = p6::load_image_buffer("assets/textures/test.jpg");
 
     //recup variable uniforme
     GLint uMVPMatrix    = glGetUniformLocation(Shader.id(), "uMVPMatrix");
     GLint uMVMatrix     = glGetUniformLocation(Shader.id(), "uMVMatrix");
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
+
+    GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
+    GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
     Model perso = Model();
     Model ile = Model();
@@ -72,10 +75,6 @@ int main()
     perso.setVao();
     ile.setVao();
 
-
-
-    // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
-    // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
     //creation du vbo
     GLuint vbo = 0;
@@ -94,23 +93,23 @@ int main()
 
 
     //initialisation de textures
-    // GLuint textureTerre;
-    // glGenTextures(1, &textureTerre);
-    // glBindTexture(GL_TEXTURE_2D, textureTerre);
+    GLuint textureTerre;
+    glGenTextures(1, &textureTerre);
+    glBindTexture(GL_TEXTURE_2D, textureTerre);
 
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_terre.width(), img_terre.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_terre.data());
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // glBindTexture(GL_TEXTURE_2D, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_terre.width(), img_terre.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_terre.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
     
-    // GLuint textureMoon;
-    // glGenTextures(1, &textureMoon);
-    // glBindTexture(GL_TEXTURE_2D, textureMoon);
+    GLuint textureMoon;
+    glGenTextures(1, &textureMoon);
+    glBindTexture(GL_TEXTURE_2D, textureMoon);
 
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_lune.width(), img_lune.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_lune.data());
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // glBindTexture(GL_TEXTURE_2D, 0);  
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_lune.width(), img_lune.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_lune.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);  
 
     // creation du vao
     GLuint vao = 0;
@@ -180,7 +179,7 @@ int main()
         glBindVertexArray(vao);
 
         //bind texture terre
-        // glBindTexture(GL_TEXTURE_2D, textureTerre);
+        glBindTexture(GL_TEXTURE_2D, textureTerre);
 
         // //TERRE
         MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
@@ -188,43 +187,38 @@ int main()
         MVMatrix = viewMatrix*MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
         // player.drawPlayer( viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+
+        // glUniform1i(uTextTerre,0);
+
         player.drawPlayer( viewMatrix,vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
 
-
-        // //mise en place texture terre
-        // // glUniform1i(uTextTerre,0);
-
-        // //application de met matrice dans les shaders
-        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        //draw le vertice
-        
-
-        // glBindTexture(GL_TEXTURE_2D, textureMoon);
+        glUniform1i(uTextTerre,0);
 
 
-        // //LUNES
-        // for(int i = 0; i<32; i++){
-        //     // glUniform1i(uTextMoon,0);
-        //     //creation d'une nouvelle mv pour la moon
-        //     glm::mat4 MVMatrixMoon = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -5.f}); // Translation
-        //     MVMatrixMoon = glm::rotate(MVMatrixMoon, ctx.time(), angleRotation[i]); // Translation * Rotation
-        //     MVMatrixMoon = glm::translate(MVMatrixMoon, axeTranslation[i]); // Translation * Rotation * Translation
-        //     MVMatrixMoon = glm::scale(MVMatrixMoon, glm::vec3{0.2f}); // Translation * Rotation * Translation * Scale
 
-        //     glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixMoon));
-        //     glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixMoon));
-        //     glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        //     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-        // }
-        
+        //positionnement du draw du perso
+        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -3., -10.));
+        MVMatrix = glm::rotate(MVMatrix, glm::radians(180.0f) ,glm::vec3(0, 1, 0));
+        MVMatrix = glm::scale(MVMatrix, glm::vec3{0.8});
+        MVMatrix = viewMatrix*MVMatrix;
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));        
+        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        perso.draw();
 
 
-        // glActiveTexture(GL_TEXTURE0);
+        // //positionnement du draw de l'ile
+        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
+        // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
+        MVMatrix = glm::scale(MVMatrix, glm::vec3{5.});
+        MVMatrix = viewMatrix*MVMatrix;
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        ile.draw();
+
     
         
 
@@ -236,6 +230,9 @@ int main()
         ImGui::SliderFloat("Cohesion", &cRadius, 0.f, 0.5f, "%.3f", 0); 
         ImGui::SliderFloat("Alignement", &aRadius, 0.f, 0.5f, "%.3f", 0); 
         ImGui::End();
+
+        glBindTexture(GL_TEXTURE_2D, textureMoon);
+
 
 
         for(int i = 0; i<nbBoids; i++){
@@ -252,38 +249,20 @@ int main()
             // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
             // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
+            glUniform1i(uTextMoon,0);
+
+
             boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
 
             glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
             boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
 
+
         }
 
 
-        //positionnement du draw du perso
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -3., -10.));
-        MVMatrix = glm::rotate(MVMatrix, glm::radians(180.0f) ,glm::vec3(0, 1, 0));
-        MVMatrix = glm::scale(MVMatrix, glm::vec3{0.8});
-        MVMatrix = viewMatrix*MVMatrix;
-        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));        
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        perso.draw();
-
-
-        //positionnement du draw de l'ile
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
-        // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
-        MVMatrix = glm::scale(MVMatrix, glm::vec3{5.});
-        MVMatrix = viewMatrix*MVMatrix;
-        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        ile.draw();
-
+        
         
         
         //debind vao
@@ -298,8 +277,8 @@ int main()
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
     perso.~Model();
-    // glDeleteTextures(1, &textureTerre);
-    // glDeleteTextures(1, &textureMoon);
+    glDeleteTextures(1, &textureTerre);
+    glDeleteTextures(1, &textureMoon);
 
     
 
