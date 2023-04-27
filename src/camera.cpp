@@ -38,12 +38,13 @@ GLfloat Camera::getVertical()const{
 }
 
 void Camera::moveRight(float amount){
-    glm::vec3 position = {amount * sin((m_horizontal + 90.0f) * M_PI / 180.0f), 0.0f, -amount * cos((m_horizontal + 90.0f) * M_PI / 180.0f)};
+    // glm::vec3 position = {amount * sin((m_horizontal + 90.0f) * M_PI / 180.0f), 0.0f, -amount * cos((m_horizontal + 90.0f) * M_PI / 180.0f)};
+    glm::vec3 position = {amount * sin((m_horizontal + 90.0f) * p6::PI / 180.0f), 0.0f, -amount * cos((m_horizontal + 90.0f) * p6::PI / 180.0f)};
 	m_player.move(position);
 }
 
 void Camera::moveFront(float amount){
-    glm::vec3 position ={amount * sin(m_horizontal * M_PI / 180.0f), 0.0f, -amount * cos(m_horizontal * M_PI / 180.0f)};
+    glm::vec3 position ={amount * sin(m_horizontal * p6::PI / 180.0f), 0.0f, -amount * cos(m_horizontal * p6::PI / 180.0f)};
     m_player.move(position);
 }
 
@@ -54,8 +55,8 @@ void Camera::rotateHorizontal(float angle){
 }
 void Camera::rotateVertical(float angle){
 	m_vertical += glm::radians(angle);
-    if (m_vertical>M_PI/2.0f){
-        m_vertical=M_PI/2.0f;
+    if (m_vertical>p6::PI/2.0f){
+        m_vertical=p6::PI/2.0f;
     }
 	
 }
@@ -63,9 +64,9 @@ void Camera::rotateVertical(float angle){
 glm::mat4 Camera::update(){
     
     glm::vec3 position;
-    position.x = m_player.getPosition().x + m_distance * sin(m_horizontal * M_PI / 180.0f) * cos(m_vertical * M_PI / 180.0f);
-    position.y = m_player.getPosition().y + m_distance * sin(m_vertical * M_PI / 180.0f);
-    position.z = m_player.getPosition().z + m_distance * cos(m_horizontal * M_PI / 180.0f) * cos(m_vertical * M_PI / 180.0f);
+    position.x = m_player.getPosition().x + m_distance * sin(m_horizontal * p6::PI / 180.0f) * cos(m_vertical * p6::PI / 180.0f);
+    position.y = m_player.getPosition().y + m_distance * sin(m_vertical * p6::PI / 180.0f);
+    position.z = m_player.getPosition().z + m_distance * cos(m_horizontal * p6::PI / 180.0f) * cos(m_vertical * p6::PI / 180.0f);
     
 
     return glm::lookAt(position, m_player.getPosition(),glm::vec3(0.0f, 1.0f, 0.f));
