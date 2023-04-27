@@ -54,6 +54,11 @@ void Model::setBuffers() {
     setVao();
 }
 
+std::vector<glimac::ShapeVertex> Model::getData() const{
+    return m_vertices;
+}
+
+
 const glimac::ShapeVertex* Model::getDataPointer() const{
     return m_vertices.data();
 }

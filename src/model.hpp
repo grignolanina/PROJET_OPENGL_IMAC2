@@ -66,6 +66,10 @@ public:
     /// \brief set buffers 
     void setBuffers();
 
+    /// \brief get data
+    std::vector<glimac::ShapeVertex> getData() const;
+
+
 	/// \brief get data of the vertices
     const glimac::ShapeVertex* getDataPointer() const;
 
