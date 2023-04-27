@@ -1,10 +1,12 @@
 #include <cstdlib>
 #include "boids.hpp"
+#include "glimac/common.hpp"
 #include "model.hpp"
 #include <iostream>
 #include <vector>
 #include "glimac/sphere_vertices.hpp"
-
+#include "camera.hpp"
+#include "player.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
@@ -60,11 +62,15 @@ int main()
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
 
     Model perso = Model();
-    perso.loadModel("personnage.obj");
-    
-    perso.setVbo();
+    Model ile = Model();
+    perso.loadModel("perso.obj");
+    ile.loadModel("ile.obj");
+
+    perso.setVbo(); 
+    ile.setVbo(); 
 
     perso.setVao();
+    ile.setVao();
 
 
 
@@ -78,7 +84,6 @@ int main()
 
     //creation de la shape
     const std::vector<glimac::ShapeVertex> vertices = glimac::sphere_vertices(1.f, 32, 16);
-    // const std::vector<glimac::ShapeVertex> vertices = glimac::sphere_vertices(test., this->m_pos.x, m_pos.y);
 
 
     // fill those coords in the vbo / Static is for constant variables
@@ -147,14 +152,28 @@ int main()
     //     axeTranslation.push_back(glm::sphericalRand(2.f));
     // }
 
+    //creation cam & initialisation des mouvements
+    // TrackballCamera camera(5, 0, 0);
+    
+    Player player;
+    Camera camera(player);
+    bool right = false;
+    bool left = false;
+    bool up = false;
+    bool down = false;
+    bool jump = false;
+
 
 
 
     ctx.update = [&](){
-    ctx.background(p6::NamedColor::Black);
-
+    // ctx.background(p6::NamedColor::Blue);
+        
+        cameraOption(camera, left, right,  up, down,jump, ctx);
+        glm::mat4 viewMatrix = camera.update();
         Shader.use();
-        glClearColor(0.2f, 0.2f, 0.2f, 1.f);
+
+        glClearColor(0.0f, 0.1f, 0.6f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //bind vao
@@ -164,9 +183,13 @@ int main()
         // glBindTexture(GL_TEXTURE_2D, textureTerre);
 
         // //TERRE
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., 0., -5.));
-        MVMatrix = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
+        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
+        // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
+        MVMatrix = viewMatrix*MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // player.drawPlayer( viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+        player.drawPlayer( viewMatrix,vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+
 
         // //mise en place texture terre
         // // glUniform1i(uTextTerre,0);
@@ -207,7 +230,7 @@ int main()
 
 
         ImGui::Begin("Params");
-        ImGui::SliderInt("Nb boids",&nbBoids, 0, 51, "%.3f", 0 );
+        ImGui::SliderInt("Nb boids",&nbBoids, 0, 50, "%d", 0 );
         // ImGui::SliderFloat("Size", &radius, 0.f, 0.1f, "%.3f", 0); 
         ImGui::SliderFloat("Separation", &sRadius, 0.f, 0.1f, "%.3f", 0); 
         ImGui::SliderFloat("Cohesion", &cRadius, 0.f, 0.5f, "%.3f", 0); 
@@ -229,7 +252,7 @@ int main()
             // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
             // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-            boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+            boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
 
             glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
@@ -237,18 +260,37 @@ int main()
 
         }
 
-        
+
+        //positionnement du draw du perso
+        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -3., -10.));
+        MVMatrix = glm::rotate(MVMatrix, glm::radians(180.0f) ,glm::vec3(0, 1, 0));
+        MVMatrix = glm::scale(MVMatrix, glm::vec3{0.8});
+        MVMatrix = viewMatrix*MVMatrix;
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));        
         glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
         glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
         glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
         perso.draw();
+
+
+        //positionnement du draw de l'ile
+        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
+        // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
+        MVMatrix = glm::scale(MVMatrix, glm::vec3{5.});
+        MVMatrix = viewMatrix*MVMatrix;
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        ile.draw();
 
         
         
         //debind vao
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);
+
+
 
     };
     
