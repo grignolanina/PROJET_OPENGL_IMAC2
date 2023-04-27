@@ -9,7 +9,6 @@ class Boid{
 	glm::vec3 m_color;
 	float m_size;
 	glm::vec3 m_speed;	
-	
 
 	public :
 	/// \brief default constructor
@@ -38,7 +37,7 @@ class Boid{
 	/// \param ctx the p6 context of creation
 	void drawBoid(p6::Context& ctx) const;
 
-	void drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,glm::mat4 viewMatrix);
+	void drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix);
 
 
 	/// \brief update behavior and position of all boids in the tab
@@ -83,6 +82,5 @@ class Boid{
 /// \brief return one boid with random caracteristic
 /// \param aspectRatio windows ratio
 Boid randomBoids(float aspectRatio);
-
 
 
