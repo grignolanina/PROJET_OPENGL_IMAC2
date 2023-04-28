@@ -4,21 +4,20 @@
 #include "p6/p6.h"
 #include "texture.hpp"
 
-
 #include <glimac/common.hpp>
 
 
 class Model{
 
 protected:
-    GLuint m_vbo; /*!< vbo of the model*/
-    GLuint m_vao; /*!< vao of the model*/
-    // GLuint m_ibo; /*!< ibo of the model*/
-    // bool m_isIbo = false; /*!< Boolean that shows if there is an ibo or not */
-    Texture m_texture; /*!< texture of the model*/
-    std::vector<glimac::ShapeVertex> m_vertices; /*!< Vector that contains the vertices (position, texture, normals) */
-    std::vector<int> m_index; /*!< Number of indices to draw */
-    GLsizei m_vertexCount; /*!< Number of vertices to draw */
+    GLuint m_vbo; 
+    GLuint m_vao;
+    // GLuint m_ibo;
+    // bool m_isIbo = false;
+    Texture m_texture; //pas encore géré
+    std::vector<glimac::ShapeVertex> m_vertices;
+    std::vector<int> m_index; 
+    GLsizei m_vertexCount;
 
 public:
     
@@ -26,24 +25,21 @@ public:
     *  \brief Constructor of the Model class
     *  \param texture The texture of the model
     */
+	/// \brief constructor param of the model class
+	/// \param texture the texture of the model
     Model(Texture texture):
         m_texture(texture)
         {}
+	/// \brief default constructor
     Model() = default;
-    
-    /*!
-    *  \brief Destructor of the Model class
-    * Deletes the buffers
-    */
 
+	/// \brief cdelete model
     ~Model(){
         glDeleteBuffers(1, &m_vbo);
         glDeleteVertexArrays(1, &m_vao);
     };
-
-    /*!
-    *  \brief Draw the model
-    */
+	
+	/// \brief draw the model
     void draw(){
         glBindVertexArray(m_vao);
         glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
@@ -55,50 +51,30 @@ public:
         // }
 }
 
-    /*!
-    *  \brief Getter of the vao of the model
-    */
-    GLuint getVao() const{
-        return m_vao;
-    }
 
-    /*!
-    *  \brief Getter of the vbo of the model
-    */
-    GLuint getVbo() const {
-        return m_vbo;
-    }
-
-    /*!
-    *  \brief Getter of the ibo of the model
-    */
+	/// \brief get the ibo of the model
     // GLuint getIbo() const{
     //     return m_vao;
     // }
 
-    /*!
-    *  \brief Set and bind the vao 
-    */
+	/// \brief set and bind a vao
     void setVao();
-    /*!
-    *  \brief Set and bind the vbo 
-    */
-    void setVbo();
-    /*!
-    *  \brief Set and bind the ibo 
-    */
-    // void setIbo();
 
-    /*!
-    *  \brief Set the buffers
-    */
+	/// \brief set and bind vbo
+    void setVbo();
+
+
+    /// \brief set buffers 
     void setBuffers();
 
+    /// \brief get data
+    std::vector<glimac::ShapeVertex> getData() const;
+
+
+	/// \brief get data of the vertices
     const glimac::ShapeVertex* getDataPointer() const;
 
-    /*!
-    *  \brief Getter of the number of vertices
-    */
+	/// \brief get the number of the vertices
     GLsizei getVertexCount() const{
     return m_vertexCount;
     }
@@ -106,10 +82,8 @@ public:
 
     const int* getIndexPointer() const;
 
-    /*!
-    *  \brief .obj file loader with TinyObj
-    *  \param fileName Name of the .obj file
-    */
+	/// \brief loader of .obj with TinyObjLoader librairy
+	/// \param fileName name of the .obj
     void loadModel(const std::string& fileName);
 
 

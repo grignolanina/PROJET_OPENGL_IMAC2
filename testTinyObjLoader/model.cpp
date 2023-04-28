@@ -3,7 +3,7 @@
 
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
+#include "tiny_obj_loader.h"
 
 void Model::setVbo(){
     GLuint vbo;
@@ -53,6 +53,11 @@ void Model::setBuffers() {
     // setIbo();  
     setVao();
 }
+
+std::vector<glimac::ShapeVertex> Model::getData() const{
+    return m_vertices;
+}
+
 
 const glimac::ShapeVertex* Model::getDataPointer() const{
     return m_vertices.data();
