@@ -38,8 +38,6 @@ class Camera {
 	void rotateHorizontal(float angle); //modifie la rotation de la cam axe horizontal
 	void rotateVertical(float angle); //modifie la rotation de la cam axe vertical
 
-	void jump(); //Pouvoir sauter
-
 	void moveRight(float amount); //déplacement vers la droite
 	
 
@@ -49,4 +47,4 @@ class Camera {
 
 };
 
-void cameraOption(Camera &camera, bool &left, bool &right, bool &up, bool &down, bool& jump, p6::Context& ctx);
+void cameraOption(Camera &camera, bool &left, bool &right, bool &up, bool &down, p6::Context& ctx);
