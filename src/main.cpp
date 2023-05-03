@@ -50,24 +50,25 @@ int main()
 
     //load shaders
     // p6::Shader Shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normal.fs.glsl");
-    p6::Shader Shader = p6::load_shader("shaders/3Dboids.vs.glsl", "shaders/3Dboids.fs.glsl");
+    // p6::Shader Shader = p6::load_shader("shaders/3Dboids.vs.glsl", "shaders/3Dboids.fs.glsl");
+    p6::Shader Shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/text3D.fs.glsl");
 
     // //load texture
-    img::Image img_terre = p6::load_image_buffer("assets/textures/test.jpg");
-    img::Image img_lune = p6::load_image_buffer("assets/textures/test.jpg");
+    img::Image img_ile = p6::load_image_buffer("assets/textures/ile.png");
+    // img::Image img_perso = p6::load_image_buffer("assets/textures/test.jpg");
 
     //recup variable uniforme
     GLint uMVPMatrix    = glGetUniformLocation(Shader.id(), "uMVPMatrix");
     GLint uMVMatrix     = glGetUniformLocation(Shader.id(), "uMVMatrix");
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
 
-    GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
-    GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
+    GLint uTextIle = glGetUniformLocation(Shader.id(), "uTextIle");
+    // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
     Model perso = Model();
     Model ile = Model();
     perso.loadModel("perso.obj");
-    ile.loadModel("ile.obj");
+    ile.loadModel("ile_3D.obj");
 
     perso.setVbo(); 
     ile.setVbo(); 
@@ -93,23 +94,23 @@ int main()
 
 
     //initialisation de textures
-    GLuint textureTerre;
-    glGenTextures(1, &textureTerre);
-    glBindTexture(GL_TEXTURE_2D, textureTerre);
+    GLuint textureIle;
+    glGenTextures(1, &textureIle);
+    glBindTexture(GL_TEXTURE_2D, textureIle);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_terre.width(), img_terre.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_terre.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_ile.width(), img_ile.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_ile.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
     
-    GLuint textureMoon;
-    glGenTextures(1, &textureMoon);
-    glBindTexture(GL_TEXTURE_2D, textureMoon);
+    // GLuint texturePerso;
+    // glGenTextures(1, &texturePerso);
+    // glBindTexture(GL_TEXTURE_2D, texturePerso);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_lune.width(), img_lune.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_lune.data());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, 0);  
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_perso.width(), img_perso.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_perso.data());
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // glBindTexture(GL_TEXTURE_2D, 0);  
 
     // creation du vao
     GLuint vao = 0;
@@ -179,7 +180,6 @@ int main()
         glBindVertexArray(vao);
 
         //bind texture terre
-        glBindTexture(GL_TEXTURE_2D, textureTerre);
 
         // //TERRE
         MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
@@ -188,11 +188,10 @@ int main()
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
         // player.drawPlayer( viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
 
-        // glUniform1i(uTextTerre,0);
+        // glUniform1i(uTextIle,0);
 
         player.drawPlayer( viewMatrix,vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
 
-        glUniform1i(uTextTerre,0);
 
 
 
@@ -208,6 +207,8 @@ int main()
         perso.draw();
 
 
+        // glUniform1i(uTextIle,0);
+
         // //positionnement du draw de l'ile
         MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
         // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
@@ -217,6 +218,9 @@ int main()
         glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
         glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
         glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        glBindTexture(GL_TEXTURE_2D, textureIle);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         ile.draw();
 
     
@@ -231,7 +235,7 @@ int main()
         ImGui::SliderFloat("Alignement", &aRadius, 0.f, 0.5f, "%.3f", 0); 
         ImGui::End();
 
-        glBindTexture(GL_TEXTURE_2D, textureMoon);
+        // glBindTexture(GL_TEXTURE_2D, texturePerso);
 
 
 
@@ -249,7 +253,7 @@ int main()
             // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
             // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-            glUniform1i(uTextMoon,0);
+            // glUniform1i(uTextMoon,0);
 
 
             boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
@@ -277,8 +281,8 @@ int main()
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
     perso.~Model();
-    glDeleteTextures(1, &textureTerre);
-    glDeleteTextures(1, &textureMoon);
+    glDeleteTextures(1, &textureIle);
+    // glDeleteTextures(1, &texturePerso);
 
     
 
