@@ -27,7 +27,7 @@ void Player::move(glm::vec3 distance){
 
 
 
-void Player::drawPlayer (glm::mat4 ViewMatrix,  std::vector<glimac::ShapeVertex> vertices, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess, p6::Context& ctx){
+void Player::drawPlayer(glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess){
     
     // glm::mat4 ViewMatrix = camera->getViewMatrix();
     ViewMatrix = glm::translate(ViewMatrix, m_PosPlayer);
@@ -51,8 +51,5 @@ void Player::drawPlayer (glm::mat4 ViewMatrix,  std::vector<glimac::ShapeVertex>
     glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
 
     glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
-    
-    
-    // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
     
 }
