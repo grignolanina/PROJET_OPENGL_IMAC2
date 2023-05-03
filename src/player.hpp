@@ -22,7 +22,7 @@ class Player{
 
         void setPosition(glm::vec3 posPlayer);
         glm::vec3 getPosition ();
-        void drawPlayer (glm::mat4 ViewMatrix,  std::vector<glimac::ShapeVertex> vertices, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess, p6::Context& ctx);
+        void drawPlayer(glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess);
         
 
 

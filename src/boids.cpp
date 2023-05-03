@@ -16,7 +16,7 @@ static constexpr float cohesionWeight = 0.5f;
 Boid::Boid():
 m_pos(glm::vec3(0., 0., 0.)),
 m_color(glm::vec3(1., 1., 1.)),
-m_size(0.02),
+m_size(0.01),
 m_speed(glm::vec3(0.02, 0.02, 0.02))
 {
 }
