@@ -39,7 +39,7 @@ GLfloat Camera::getVertical()const{
 
 void Camera::moveRight(float amount){
     // glm::vec3 position = {amount * sin((m_horizontal + 90.0f) * M_PI / 180.0f), 0.0f, -amount * cos((m_horizontal + 90.0f) * M_PI / 180.0f)};
-    glm::vec3 position = {amount * sin((m_horizontal + 90.0f) * p6::PI / 180.0f), 0.0f, -amount * cos((m_horizontal + 90.0f) * p6::PI / 180.0f)};
+    glm::vec3 position = {amount * glm::sin((m_horizontal + 90.0f) * p6::PI / 180.0f), 0.0f, -amount * cos((m_horizontal + 90.0f) * p6::PI / 180.0f)};
 	m_player.move(position);
 }
 
@@ -72,31 +72,19 @@ glm::mat4 Camera::update(){
     return glm::lookAt(position, m_player.getPosition(),glm::vec3(0.0f, 1.0f, 0.f));
 }
 
-void Camera::jump(){
-    m_player.jumpPlayer(m_player, 1.f, -9.81f, 1.);
-    glm::vec3 cameraPos = glm::vec3(m_player.getPosition().x, m_player.getPosition().y + 1.f, m_player.getPosition().z + 5.f);
-    glm::vec3 targetPos = m_player.getPosition();
-    glm::vec3 upVector = glm::vec3(0.f, 1.f, 0.f);
-    glm::lookAt(cameraPos, targetPos, upVector);
-    
-}
 
-
-void cameraOption(Camera &camera, bool &left, bool &right, bool &up, bool &down, bool& jump, p6::Context& ctx)	{
+void cameraOption(Camera &camera, bool &left, bool &right, bool &up, bool &down, p6::Context& ctx)	{
         if(right){
-            camera.moveRight(-0.05f);
+            camera.moveRight(0.05f);
         }
         if(left){
-            camera.moveRight(0.05f);
+            camera.moveRight(-0.05f);
         }
         if(up){
             camera.moveFront(0.05f);
         }
         if(down){
             camera.moveFront(-0.05f);
-        }
-        if(jump){
-            camera.jump();
         }
 
         ctx.key_pressed = [&right, &up, &left, &down](const p6::Key& key){
@@ -112,9 +100,7 @@ void cameraOption(Camera &camera, bool &left, bool &right, bool &up, bool &down,
             if(key.logical == "s"){
                 down = true;
             }
-            if(key.logical == "j"){
-                down = true;
-            }
+
         };
 
         ctx.key_released = [&right, &up, &left, &down](const p6::Key& key){
@@ -128,9 +114,6 @@ void cameraOption(Camera &camera, bool &left, bool &right, bool &up, bool &down,
                 up = false;
             }
             if(key.logical == "s"){
-                down = false;
-            }
-            if(key.logical == "j"){
                 down = false;
             }
         };

@@ -61,6 +61,13 @@ int main()
     GLint uMVMatrix     = glGetUniformLocation(Shader.id(), "uMVMatrix");
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
 
+    GLint uKd        = glGetUniformLocation(Shader.id(), "uKd");
+    GLint uKs        = glGetUniformLocation(Shader.id(), "uKs");
+    GLint uShininess = glGetUniformLocation(Shader.id(), "uShininess");
+
+    GLint uLightPos_vs    = glGetUniformLocation(Shader.id(), "uLightPos_vs");
+    GLint uLightIntensity = glGetUniformLocation(Shader.id(), "uLightIntensity");
+
     Model perso = Model();
     Model ile = Model();
     perso.loadModel("perso.obj");
@@ -155,6 +162,8 @@ int main()
     //creation cam & initialisation des mouvements
     // TrackballCamera camera(5, 0, 0);
     
+
+
     Player player;
     Camera camera(player);
     bool right = false;
@@ -169,7 +178,7 @@ int main()
     ctx.update = [&](){
     // ctx.background(p6::NamedColor::Blue);
         
-        cameraOption(camera, left, right,  up, down,jump, ctx);
+        cameraOption(camera, left, right,  up, down, ctx);
         glm::mat4 viewMatrix = camera.update();
         Shader.use();
 
@@ -187,48 +196,21 @@ int main()
         // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
         MVMatrix = viewMatrix*MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+
+
         // player.drawPlayer( viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
-        player.drawPlayer( viewMatrix,vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
+        player.drawPlayer( viewMatrix,vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess, ctx);
+        perso.draw();
 
-
-        // //mise en place texture terre
-        // // glUniform1i(uTextTerre,0);
-
-        // //application de met matrice dans les shaders
-        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        //draw le vertice
-        
-
-        // glBindTexture(GL_TEXTURE_2D, textureMoon);
-
-
-        // //LUNES
-        // for(int i = 0; i<32; i++){
-        //     // glUniform1i(uTextMoon,0);
-        //     //creation d'une nouvelle mv pour la moon
-        //     glm::mat4 MVMatrixMoon = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -5.f}); // Translation
-        //     MVMatrixMoon = glm::rotate(MVMatrixMoon, ctx.time(), angleRotation[i]); // Translation * Rotation
-        //     MVMatrixMoon = glm::translate(MVMatrixMoon, axeTranslation[i]); // Translation * Rotation * Translation
-        //     MVMatrixMoon = glm::scale(MVMatrixMoon, glm::vec3{0.2f}); // Translation * Rotation * Translation * Scale
-
-        //     glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixMoon));
-        //     glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixMoon));
-        //     glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        //     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-        // }
-        
-
-
-        // glActiveTexture(GL_TEXTURE0);
+        //Lumière de la scène
+        glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
+        glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
+        glUniform1f(uShininess, 0.1);
+        glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(viewMatrix, glm::vec3(0, 0, -5)) * glm::vec4(1, 1, 1, 1))));
+        glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(10, 10, 10)));
+        //Fin lumière de la scène
     
-        
-
-
+    
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids",&nbBoids, 0, 50, "%d", 0 );
         // ImGui::SliderFloat("Size", &radius, 0.f, 0.1f, "%.3f", 0); 
@@ -239,18 +221,7 @@ int main()
 
 
         for(int i = 0; i<nbBoids; i++){
-            // boidsTab[i].drawBoid(ctx);
-            // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
-                        //creation d'une nouvelle mv pour la moon
-            // glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -5.f}); // Translation
-            // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(boidsTab[i].randomSpeed())); // Translation * Rotation
-            // MVMatrixBoids = glm::translate(MVMatrixBoids, boidsTab[i].randomPos(ctx.aspect_ratio())); // Translation * Rotation * Translation
-            // MVMatrixBoids = glm::scale(MVMatrixBoids, glm::vec3{0.2f}); // Translation * Rotation * Translation * Scale
-
-            // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixBoids));
-            // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
-            // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
             boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
 
@@ -261,16 +232,16 @@ int main()
         }
 
 
-        //positionnement du draw du perso
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -3., -10.));
-        MVMatrix = glm::rotate(MVMatrix, glm::radians(180.0f) ,glm::vec3(0, 1, 0));
-        MVMatrix = glm::scale(MVMatrix, glm::vec3{0.8});
-        MVMatrix = viewMatrix*MVMatrix;
-        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));        
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        perso.draw();
+        // //positionnement du draw du perso
+        // MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -3., -10.));
+        // MVMatrix = glm::rotate(MVMatrix, glm::radians(180.0f) ,glm::vec3(0, 1, 0));
+        // MVMatrix = glm::scale(MVMatrix, glm::vec3{0.8});
+        // MVMatrix = viewMatrix*MVMatrix;
+        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));        
+        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        // perso.draw();
 
 
         //positionnement du draw de l'ile
