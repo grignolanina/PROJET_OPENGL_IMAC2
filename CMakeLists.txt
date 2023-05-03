@@ -64,5 +64,3 @@ function(add_exercise EXERCISE_NAME)
 endfunction(add_exercise)
 
 add_exercise(src)
-add_exercise(testTinyObjLoader)
-add_exercise(test_project)

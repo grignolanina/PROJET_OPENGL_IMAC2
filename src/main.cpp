@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "boids.hpp"
+#include "boids/boids.hpp"
 #include "glimac/common.hpp"
 #include "model.hpp"
 #include <iostream>
