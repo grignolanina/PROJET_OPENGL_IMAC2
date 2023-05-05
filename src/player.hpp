@@ -5,6 +5,8 @@
 #include "p6/p6.h"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "model.hpp"
+#include "program.hpp"
 
 
 
@@ -22,7 +24,8 @@ class Player{
 
         void setPosition(glm::vec3 posPlayer);
         glm::vec3 getPosition ();
-        void drawPlayer(glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess);
+        // void drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess);
+        void drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program &program);
         
 
 
