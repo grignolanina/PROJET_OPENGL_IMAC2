@@ -225,15 +225,10 @@ int main()
         }
 
 
-        // //positionnement du draw de l'ile
-        // MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
-        // MVMatrix = glm::scale(MVMatrix, glm::vec3{5.});
-        // MVMatrix = viewMatrix*MVMatrix;
-        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        // ile.draw();
+        //draw de l'ile
+        ShaderText.use();
+
+        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderText);
 
         
         

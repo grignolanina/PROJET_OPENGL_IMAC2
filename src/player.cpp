@@ -92,6 +92,6 @@ void Player::drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix
     // glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
     // glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
 
-    model.draw();
+    model.drawArray();
     
 }

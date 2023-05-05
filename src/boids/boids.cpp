@@ -83,7 +83,7 @@ void Boid::drawBoid3D(Model &model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix
     // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
     // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-    model.draw();
+    model.drawArray();
 
 }
 

@@ -2,6 +2,7 @@
 
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
+#include "program.hpp"
 
 #include <glimac/common.hpp>
 
@@ -39,16 +40,10 @@ public:
     };
 	
 	/// \brief draw the model
-    void draw(){
-        glBindVertexArray(m_vao);
-        // glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
-        // if(m_isIbo){
-        //     glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT,0);
-        // }
-        // else{
-            glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
-        // }
-}
+    void drawArray();
+
+    /// \brief set the drawSetup
+    void draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program &program);
 
 
 	/// \brief get the ibo of the model
