@@ -21,15 +21,15 @@ uniform float uShininess;//Ces 3 variables servent à représenter le matériau 
 uniform vec3 uLightPos_vs;
 uniform vec3 uLightIntensity;//Ces deux variables servent à passer les informations sur la lumière au Shader 
 
-// vec3 blinnPhong(){
-//     float d = distance(vPosition_vs, uLightPos_vs);
-//     vec3 wi= normalize(uLightPos_vs-vPosition_vs);
-//     vec3 Li= (uLightIntensity/(d*d));
-//     vec3 w0 = (normalize(-vPosition_vs));
-//     vec3 N = vNormal_vs;
-//     vec3 halfVector = (w0+wi)/2.f;
-//     return Li*(uKd*(dot(wi, N))+uKs*pow(dot(halfVector,N),uShininess));
-// }
+vec3 blinnPhong(){
+    float d = distance(vPosition_vs, uLightPos_vs);
+    vec3 wi= normalize(uLightPos_vs-vPosition_vs);
+    vec3 Li= (uLightIntensity/(d*d));
+    vec3 w0 = (normalize(-vPosition_vs));
+    vec3 N = vNormal_vs;
+    vec3 halfVector = (w0+wi)/2.f;
+    return Li*(uKd*(dot(wi, N))+uKs*pow(dot(halfVector,N),uShininess));
+}
 
 
 void main() {
@@ -41,10 +41,10 @@ void main() {
 
 	// fFragColor = texture(uTextTerre, fCorrectCoords) + texture(uTextMoon, fCorrectCoords);
 	// fFragColor = vec4(1., 1., 0., 1.);
-	vec3 normal = normalize(vNormal_vs);
-    fFragColor = vec4(normal, 1);
+	// vec3 normal = normalize(vNormal_vs);
+    // fFragColor = normal.xzy;
 
-	// fFragColor = vec4(blinnPhong(),1.);
+	fFragColor = vec4(blinnPhong(),1.);
 	
     // fFragColor = texture(uTexture1, fCorrectCoords) + texture(uTexture2, fCorrectCoords);
 }

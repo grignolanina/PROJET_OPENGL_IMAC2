@@ -47,7 +47,25 @@ void Boid::drawBoid(p6::Context& ctx) const
     ctx.use_stroke = false;
 }
 
-void Boid::drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix, glm::mat4 viewMatrix){
+// void Boid::drawBoid3D(Model &model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix, glm::mat4 viewMatrix){
+
+//     glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -3.f}); // Translation
+//     // // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(this->m_speed)); // Translation * Rotation
+//     MVMatrixBoids = glm::translate(MVMatrixBoids, this->m_pos); // Translation * Rotation * Translation
+    
+//     //glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, this->m_pos); // Translation
+    
+//     MVMatrixBoids = glm::scale(MVMatrixBoids, glm::vec3{this->m_size}); // Translation * Rotation * Translation * Scale
+//     MVMatrixBoids = viewMatrix*MVMatrixBoids;
+//     glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixBoids));
+//     glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
+//     glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+//     model.draw();
+
+// }
+
+void Boid::drawBoid3D(Model &model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program &program){
 
     glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -3.f}); // Translation
     // // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(this->m_speed)); // Translation * Rotation
@@ -57,9 +75,16 @@ void Boid::drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMa
     
     MVMatrixBoids = glm::scale(MVMatrixBoids, glm::vec3{this->m_size}); // Translation * Rotation * Translation * Scale
     MVMatrixBoids = viewMatrix*MVMatrixBoids;
-    glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixBoids));
-    glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
-    glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+    program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * MVMatrixBoids);
+    program.uniformMatrix4fv("uMVMatrix", MVMatrixBoids);
+    program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
+    // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixBoids));
+    // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
+    // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+    model.draw();
+
 }
 
 void Boid::updateBoid(p6::Context& ctx, std::vector<Boid>& boidsTab, float sRadius, float cRadius, float aRadius)

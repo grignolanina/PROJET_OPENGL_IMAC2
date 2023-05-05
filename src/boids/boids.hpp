@@ -2,6 +2,8 @@
 
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
+#include "../model.hpp"
+#include "../program.hpp"
 
 class Boid{
 	private:
@@ -38,7 +40,9 @@ class Boid{
 	/// \param ctx the p6 context of creation
 	void drawBoid(p6::Context& ctx) const;
 
-	void drawBoid3D(glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,glm::mat4 viewMatrix);
+	// void drawBoid3D(Model &model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,glm::mat4 viewMatrix);
+
+	void drawBoid3D(Model &model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program &program);
 
 
 	/// \brief update behavior and position of all boids in the tab

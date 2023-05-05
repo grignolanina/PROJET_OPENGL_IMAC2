@@ -2,6 +2,8 @@
 #include "boids/boids.hpp"
 #include "glimac/common.hpp"
 #include "model.hpp"
+#include "program.hpp"
+
 #include <iostream>
 #include <vector>
 #include "glimac/sphere_vertices.hpp"
@@ -45,23 +47,46 @@ int main()
 
     //load shaders
     // p6::Shader Shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normal.fs.glsl");
-    p6::Shader Shader = p6::load_shader("shaders/3Dboids.vs.glsl", "shaders/3Dboids.fs.glsl");
+    // p6::Shader ShaderPoint = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
+    // p6::Shader ShaderPoint = p6::load_shader("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
+
+   
 
     // //load texture
     // img::Image img_terre = p6::load_image_buffer("assets/textures/EarthMap.jpg");
     // img::Image img_lune = p6::load_image_buffer("assets/textures/MoonMap.jpg");
 
-    //recup variable uniforme
-    GLint uMVPMatrix    = glGetUniformLocation(Shader.id(), "uMVPMatrix");
-    GLint uMVMatrix     = glGetUniformLocation(Shader.id(), "uMVMatrix");
-    GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
+    // // recup variable uniforme
 
-    GLint uKd        = glGetUniformLocation(Shader.id(), "uKd");
-    GLint uKs        = glGetUniformLocation(Shader.id(), "uKs");
-    GLint uShininess = glGetUniformLocation(Shader.id(), "uShininess");
+    // GLint uMVPMatrix    = glGetUniformLocation(ShaderPoint.id(), "uMVPMatrix");
+    // GLint uMVMatrix     = glGetUniformLocation(ShaderPoint.id(), "uMVMatrix");
+    // GLint uNormalMatrix = glGetUniformLocation(ShaderPoint.id(), "uNormalMatrix");
+    // GLint uKd        = glGetUniformLocation(ShaderPoint.id(), "uKd");
+    // GLint uKs        = glGetUniformLocation(ShaderPoint.id(), "uKs");
+    // GLint uShininess = glGetUniformLocation(ShaderPoint.id(), "uShininess");
+    // GLint uLightPos_vs    = glGetUniformLocation(ShaderPoint.id(), "uLightPos_vs");
+    // GLint uLightIntensity = glGetUniformLocation(ShaderPoint.id(), "uLightIntensity");
 
-    GLint uLightPos_vs    = glGetUniformLocation(Shader.id(), "uLightPos_vs");
-    GLint uLightIntensity = glGetUniformLocation(Shader.id(), "uLightIntensity");
+
+    //  //nouveau set
+    Program ShaderPoint("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
+    Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
+
+    // // //nouveau set
+    ShaderPoint.addUniformVariable("uMVPMatrix");
+    ShaderPoint.addUniformVariable("uMVMatrix");
+    ShaderPoint.addUniformVariable("uNormalMatrix");
+    ShaderPoint.addUniformVariable("uKd");
+    ShaderPoint.addUniformVariable("uKs");
+    ShaderPoint.addUniformVariable("uShininess");
+    ShaderPoint.addUniformVariable("uLightPos_vs");
+    ShaderPoint.addUniformVariable("uLightIntensity");
+
+    ShaderText.addUniformVariable("uMVPMatrix");
+    ShaderText.addUniformVariable("uMVMatrix");
+    ShaderText.addUniformVariable("uNormalMatrix");
+
+
 
     Model perso = Model();
     Model ile = Model();
@@ -146,7 +171,7 @@ int main()
         
         cameraOption(camera, left, right,  up, down, ctx);
         glm::mat4 viewMatrix = camera.update();
-        Shader.use();
+        ShaderPoint.use();
 
         glClearColor(0.0f, 0.1f, 0.6f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -157,16 +182,23 @@ int main()
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
 
-        player.drawPlayer(viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
-        perso.draw();
+        // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
 
-        //Lumière de la scène
-        glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
-        glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
-        glUniform1f(uShininess, 0.1);
-        glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(viewMatrix, glm::vec3(0, 0, -5)) * glm::vec4(1, 1, 1, 1))));
-        glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(10, 10, 10)));
-        //Fin lumière de la scène
+        player.drawPlayer(perso, viewMatrix,ProjMatrix, ShaderPoint);
+
+
+
+
+        // ShaderPoint.use();
+
+
+        // // Lumière de la scène
+        // glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
+        // glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
+        // glUniform1f(uShininess, 0.1);
+        // glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(viewMatrix, glm::vec3(0, 0, -5)) * glm::vec4(1, 1, 1, 1))));
+        // glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(10, 10, 10)));
+        // //Fin lumière de la scène
     
     
         ImGui::Begin("Params");
@@ -177,13 +209,14 @@ int main()
         ImGui::SliderFloat("Alignement", &aRadius, 0.f, 0.5f, "%.3f", 0); 
         ImGui::End();
 
+        ShaderText.use();
 
         for(int i = 0; i<nbBoids; i++){
 
 
-            boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
 
-            boid.draw();
+            // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
+            boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix,viewMatrix, ShaderText);
 
             // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
@@ -192,16 +225,15 @@ int main()
         }
 
 
-        //positionnement du draw de l'ile
-        MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
-        // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
-        MVMatrix = glm::scale(MVMatrix, glm::vec3{5.});
-        MVMatrix = viewMatrix*MVMatrix;
-        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        ile.draw();
+        // //positionnement du draw de l'ile
+        // MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
+        // MVMatrix = glm::scale(MVMatrix, glm::vec3{5.});
+        // MVMatrix = viewMatrix*MVMatrix;
+        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        // ile.draw();
 
         
         
