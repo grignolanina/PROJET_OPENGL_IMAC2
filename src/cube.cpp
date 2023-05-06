@@ -5,7 +5,7 @@ Cube::Cube(float size):m_size(size) {
 
         // Calculer les coordonnées des sommets
         float x = size / 2.0f;
-        float y = size / 2.0f;
+        float y = size /2.0f;
         float z = size / 2.0f;
 
         glGenBuffers(1, &vbo);
@@ -13,12 +13,12 @@ Cube::Cube(float size):m_size(size) {
 
         vertices = {
             -x, -y, -z,
-             x, -y, -z,
-             x,  y, -z,
+            x, -y, -z,
+            x,  y, -z,
             -x,  y, -z,
             -x, -y,  z,
-             x, -y,  z,
-             x,  y,  z,
+            x, -y,  z,
+            x,  y,  z,
             -x,  y,  z
         };
 
@@ -35,8 +35,8 @@ Cube::Cube(float size):m_size(size) {
             2, 3, 0,
             1, 5, 6,
             6, 2, 1,
-             4, 7, 6,
-             6, 5, 4,
+            4, 7, 6,
+            6, 5, 4,
             0, 3, 7,
             7, 4, 0,
             3, 2, 6,
@@ -45,32 +45,26 @@ Cube::Cube(float size):m_size(size) {
             5, 1, 0
         };
         
-        // => On remplit l'IBO avec les indices:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        // Créer le VAO et le VBO
+        
         glGenVertexArrays(1, &vao);        
         glBindVertexArray(vao);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        // Spécifier la structure des données du VBO
-
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-            //On débind le vbo
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        //On débind le vao
         glBindVertexArray(0);
     }
 
 void Cube::draw() const {
     
-    // Dessiner le cube avec le VAO et l'EBO
+    // Dessiner le cube avec le VAO et l'IBO
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }

@@ -17,7 +17,7 @@ class Cube{
 
     public :
 
-        Cube(float size);
+        explicit Cube(float size);
 
         void draw() const;
         
