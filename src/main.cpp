@@ -13,6 +13,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
 #include "p6/p6.h"
+#include "cube.hpp"
 
 
 
@@ -38,7 +39,7 @@ int main()
 
     }
 
-
+    Cube cube(5.0f);
     // float radius = 0.02;
     float sRadius = 0.05;
     float cRadius = 0.2;
@@ -176,7 +177,8 @@ int main()
         glClearColor(0.0f, 0.1f, 0.6f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        
+        
         MVMatrix = glm::translate(glm::mat4(1.0),glm::vec3(0., -5., -5.));
         MVMatrix = viewMatrix*MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
@@ -229,7 +231,7 @@ int main()
         ShaderText.use();
 
         ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderText);
-
+        cube.draw();
         
         
         //debind vao
