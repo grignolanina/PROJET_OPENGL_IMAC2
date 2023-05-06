@@ -76,8 +76,8 @@ void Player::drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix
     // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
     // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-    program.uniform3fv("uKd", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    program.uniform3fv("uKs", (glm::vec3(0.1f, 0.1f, 0.1f)));
+    program.uniform3fv("uKd", (glm::vec3(0.2f, 0.1f, 0.15f)));
+    program.uniform3fv("uKs", (glm::vec3(0.2f, 0.1f, 0.1f)));
     program.uniform1f("uShininess", 0.6);
 
     // glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
