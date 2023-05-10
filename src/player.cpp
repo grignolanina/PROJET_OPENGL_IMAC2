@@ -1,15 +1,16 @@
 #include "player.hpp"
-
-
+#include <p6/p6.h>
+#include <vector>
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/trigonometric.hpp"
-#include <p6/p6.h>
-#include <vector>
 
-Player::Player():m_PosPlayer(0.,-2,-2.2){}; 
 
-Player::Player(glm::vec3 posPlayer):m_PosPlayer(posPlayer){};
+Player::Player()
+    : m_PosPlayer(0., -2, -2.2){};
+
+Player::Player(glm::vec3 posPlayer)
+    : m_PosPlayer(posPlayer){};
 
 void Player::setPosition(glm::vec3 posPlayer)
 {
@@ -21,23 +22,21 @@ glm::vec3 Player::getPosition()
     return m_PosPlayer;
 }
 
-void Player::move(glm::vec3 distance){
-    m_PosPlayer+=distance;
+void Player::move(glm::vec3 distance)
+{
+    m_PosPlayer += distance;
 }
 
-
-
 // void Player::drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,GLint uLightPos_vs, GLint uLightIntensity, GLint uKs, GLint uKd, GLint uShininess){
-    
+
 //     // glm::mat4 ViewMatrix = camera->getViewMatrix();
 //     ViewMatrix = glm::translate(ViewMatrix, m_PosPlayer);
 //     // ViewMatrix = glm::rotate(ViewMatrix, 45.f, glm::vec3(1.,0.,0.));
 //     ViewMatrix = glm::translate(ViewMatrix, glm::vec3(0, -0.7, 0.0));
-    
+
 //     ViewMatrix = glm::scale(ViewMatrix, glm::vec3(0.2, 0.2, 0.2));
 //     glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrix));
 
-    
 //     glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * ViewMatrix));
 //     glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
 //     glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
@@ -53,20 +52,18 @@ void Player::move(glm::vec3 distance){
 //     glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
 
 //     model.draw();
-    
+
 // }
 
-
-void Player::drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program &program){
-    
+void Player::drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program)
+{
     // glm::mat4 ViewMatrix = camera->getViewMatrix();
     ViewMatrix = glm::translate(ViewMatrix, m_PosPlayer);
     // ViewMatrix = glm::rotate(ViewMatrix, 45.f, glm::vec3(1.,0.,0.));
     ViewMatrix = glm::translate(ViewMatrix, glm::vec3(0, -0.7, 0.0));
-    
-    ViewMatrix = glm::scale(ViewMatrix, glm::vec3(0.2, 0.2, 0.2));
-    glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrix));
 
+    ViewMatrix             = glm::scale(ViewMatrix, glm::vec3(0.2, 0.2, 0.2));
+    glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrix));
 
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrix);
     program.uniformMatrix4fv("uMVMatrix", ViewMatrix);
@@ -93,5 +90,4 @@ void Player::drawPlayer(Model &model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix
     // glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
 
     model.drawArray();
-    
 }

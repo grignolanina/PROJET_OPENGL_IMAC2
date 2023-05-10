@@ -4,38 +4,38 @@
 #include "glm/fwd.hpp"
 #include "glm/matrix.hpp"
 
-
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-void Model::drawArray(){
-        glBindVertexArray(m_vao);
-        // glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
-        // if(m_isIbo){
-        //     glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT,0);
-        // }
-        // else{
-            glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
-        // }
+void Model::drawArray()
+{
+    glBindVertexArray(m_vao);
+    // glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
+    // if(m_isIbo){
+    //     glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT,0);
+    // }
+    // else{
+    glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
+    // }
 }
 
-void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program &program){
+void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program& program)
+{
     glm::mat4 ViewMatrixModel = glm::translate(glm::mat4(1.0), pos);
-    ViewMatrixModel = glm::scale(ViewMatrixModel, scale);
+    ViewMatrixModel           = glm::scale(ViewMatrixModel, scale);
 
     glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrixModel));
 
-    ViewMatrixModel = viewMatrix*ViewMatrixModel;
+    ViewMatrixModel = viewMatrix * ViewMatrixModel;
 
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrixModel);
     program.uniformMatrix4fv("uMVMatrix", ViewMatrixModel);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
 
-
-    //si on veut utiliser la lumière ici
-    // program.uniform3fv("uKd", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    // program.uniform3fv("uKs", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    // program.uniform1f("uShininess", 0.6);
+    // si on veut utiliser la lumière ici
+    //  program.uniform3fv("uKd", (glm::vec3(0.1f, 0.1f, 0.1f)));
+    //  program.uniform3fv("uKs", (glm::vec3(0.1f, 0.1f, 0.1f)));
+    //  program.uniform1f("uShininess", 0.6);
 
     // program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrixModel, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
     // program.uniform3fv("uLightIntensity", (glm::vec3(0.5, 0.5, 0.5)));
@@ -43,7 +43,8 @@ void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4
     this->drawArray();
 }
 
-void Model::setVbo(){
+void Model::setVbo()
+{
     GLuint vbo;
     m_vbo = vbo;
     glGenBuffers(1, &m_vbo);
@@ -51,8 +52,6 @@ void Model::setVbo(){
     glBufferData(GL_ARRAY_BUFFER, getVertexCount() * sizeof(glimac::ShapeVertex), getDataPointer(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-
-
 
 // void Model::setIbo(){
 //     GLuint ibo;
@@ -64,108 +63,114 @@ void Model::setVbo(){
 //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 // }
 
-void Model::setVao(){
+void Model::setVao()
+{
     GLuint vao;
     m_vao = vao;
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
-    // if(m_isIbo){        
+    // if(m_isIbo){
     //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
     // }
-    const GLuint VERTEX_ATTR_POSITION = 0;
-    const GLuint VERTEX_ATTR_NORMAL = 1;
+    const GLuint VERTEX_ATTR_POSITION  = 0;
+    const GLuint VERTEX_ATTR_NORMAL    = 1;
     const GLuint VERTEX_ATTR_TEXCOORDS = 2;
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
     glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
     glEnableVertexAttribArray(VERTEX_ATTR_TEXCOORDS);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid *)offsetof(glimac::ShapeVertex, position));
-    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid *)offsetof(glimac::ShapeVertex, normal));
-    glVertexAttribPointer(VERTEX_ATTR_TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid *)offsetof(glimac::ShapeVertex, texCoords));
+    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)offsetof(glimac::ShapeVertex, position));
+    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)offsetof(glimac::ShapeVertex, normal));
+    glVertexAttribPointer(VERTEX_ATTR_TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)offsetof(glimac::ShapeVertex, texCoords));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
 
-void Model::setBuffers() {
+void Model::setBuffers()
+{
     setVbo();
-    // setIbo();  
+    // setIbo();
     setVao();
 }
 
-std::vector<glimac::ShapeVertex> Model::getData() const{
+std::vector<glimac::ShapeVertex> Model::getData() const
+{
     return m_vertices;
 }
 
-
-const glimac::ShapeVertex* Model::getDataPointer() const{
+const glimac::ShapeVertex* Model::getDataPointer() const
+{
     return m_vertices.data();
 }
 
-
-
-const int* Model::getIndexPointer() const{
+const int* Model::getIndexPointer() const
+{
     return &m_index[0];
 }
 
-void Model::loadModel(const std::string& fileName){
-        
-        // Load 3D object
-        std::string inputfile = "assets/models/"+fileName;
-        tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials; 
-        
-        std::string warn;
-        std::string err;
-        bool ret = tinyobj::LoadObj(&attrib,&shapes,&materials, &warn, &err, inputfile.c_str(), nullptr);
-        
-        if (!err.empty()) { // `err` may contain warning message.
-            std::cerr << err << std::endl;
-        }
+void Model::loadModel(const std::string& fileName)
+{
+    // Load 3D object
+    std::string                      inputfile = "assets/models/" + fileName;
+    tinyobj::attrib_t                attrib;
+    std::vector<tinyobj::shape_t>    shapes;
+    std::vector<tinyobj::material_t> materials;
 
-        if (!ret) {
-            exit(1);
-        }
+    std::string warn;
+    std::string err;
+    bool        ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str(), nullptr);
 
-        // Loop over shapes
-        for (size_t s = 0; s < shapes.size(); s++) {
-            // Loop over faces(polygon)
-            size_t index_offset = 0;
-            for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
-                size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
+    if (!err.empty())
+    { // `err` may contain warning message.
+        std::cerr << err << std::endl;
+    }
 
-                // Loop over vertices in the face.
-                for (size_t v = 0; v < fv; v++) {
+    if (!ret)
+    {
+        exit(1);
+    }
 
-                    tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
-                    // access to vertex
-                    glimac::ShapeVertex newVertex = glimac::ShapeVertex(
-                        
-                        // POSITION
-                        glm::vec3(
-                            tinyobj::real_t(attrib.vertices[3*size_t(idx.vertex_index)+0]),
-                            tinyobj::real_t(attrib.vertices[3*size_t(idx.vertex_index)+1]),
-                            tinyobj::real_t(attrib.vertices[3*size_t(idx.vertex_index)+2])
-                        ),
+    // Loop over shapes
+    for (size_t s = 0; s < shapes.size(); s++)
+    {
+        // Loop over faces(polygon)
+        size_t index_offset = 0;
+        for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++)
+        {
+            size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
 
-                        // NORMAL
-                        glm::vec3(
-                            tinyobj::real_t(attrib.normals[3*size_t(idx.normal_index)+0]),  // nx
-                            tinyobj::real_t(attrib.normals[3*size_t(idx.normal_index)+1]),  // ny
-                            tinyobj::real_t(attrib.normals[3*size_t(idx.normal_index)+2])   // nz
-                        ),
+            // Loop over vertices in the face.
+            for (size_t v = 0; v < fv; v++)
+            {
+                tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+                // access to vertex
+                glimac::ShapeVertex newVertex = glimac::ShapeVertex(
 
-                        // TEXTURE_COORDINATES
-                        glm::vec2(
-                            tinyobj::real_t(attrib.texcoords[2*size_t(idx.texcoord_index)+0]),  //tx
-                            tinyobj::real_t(attrib.texcoords[2*size_t(idx.texcoord_index)+1])   //ty
-                        )
-                    );
+                    // POSITION
+                    glm::vec3(
+                        tinyobj::real_t(attrib.vertices[3 * size_t(idx.vertex_index) + 0]),
+                        tinyobj::real_t(attrib.vertices[3 * size_t(idx.vertex_index) + 1]),
+                        tinyobj::real_t(attrib.vertices[3 * size_t(idx.vertex_index) + 2])
+                    ),
 
-                    m_vertices.push_back(newVertex);
-                }
-                index_offset += fv;
+                    // NORMAL
+                    glm::vec3(
+                        tinyobj::real_t(attrib.normals[3 * size_t(idx.normal_index) + 0]), // nx
+                        tinyobj::real_t(attrib.normals[3 * size_t(idx.normal_index) + 1]), // ny
+                        tinyobj::real_t(attrib.normals[3 * size_t(idx.normal_index) + 2])  // nz
+                    ),
+
+                    // TEXTURE_COORDINATES
+                    glm::vec2(
+                        tinyobj::real_t(attrib.texcoords[2 * size_t(idx.texcoord_index) + 0]), // tx
+                        tinyobj::real_t(attrib.texcoords[2 * size_t(idx.texcoord_index) + 1])  // ty
+                    )
+                );
+
+                m_vertices.push_back(newVertex);
             }
+            index_offset += fv;
         }
-        m_vertexCount = m_vertices.size();
+    }
+    m_vertexCount = m_vertices.size();
 }
