@@ -164,6 +164,8 @@ int main()
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
+        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
+
         // ShaderPoint.use();
 
         // // Lumière de la scène
@@ -195,10 +197,11 @@ int main()
         }
 
         // draw de l'ile
-        ShaderText.use();
+        // ShaderText.use();
+        // ShaderPoint.use();
 
-        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderText);
-        cube.draw();
+        // ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
+        // cube.draw();
 
         // debind vao
         glBindVertexArray(0);
