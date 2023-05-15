@@ -2,6 +2,7 @@
 
 #include <glimac/common.hpp>
 #include "glm/fwd.hpp"
+#include "light.hpp"
 #include "p6/p6.h"
 #include "program.hpp"
 
@@ -40,7 +41,7 @@ public:
     void drawArray();
 
     /// \brief set the drawSetup
-    void draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program);
+    void draw(glm::vec3 pos, glm::vec3 scale, Light light, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program);
 
     /// \brief get the ibo of the model
     // GLuint getIbo() const{

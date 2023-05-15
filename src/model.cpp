@@ -19,7 +19,7 @@ void Model::drawArray()
     // }
 }
 
-void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program)
+void Model::draw(glm::vec3 pos, glm::vec3 scale, Light light, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program)
 {
     glm::mat4 ViewMatrixModel = glm::translate(glm::mat4(1.0), pos);
     ViewMatrixModel           = glm::scale(ViewMatrixModel, scale);
@@ -36,27 +36,14 @@ void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4
     program.uniform3fv("uKs", (glm::vec3(0.2f, 0.1f, 0.1f)));
     program.uniform1f("uShininess", 0.6);
 
-    program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 1, -3)) * glm::vec4(1, 1, 0, 1))));
-    program.uniform3fv("uLightIntensity", (glm::vec3{600}));
+    // program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 1, -3)) * glm::vec4(1, 1, 0, 1))));
+    // program.uniform3fv("uLightIntensity", (glm::vec3{600}));
 
-    // glm::mat4 ViewMatrix = glm::translate(viewMatrix, pos);
-    // ViewMatrix           = glm::translate(ViewMatrix, glm::vec3(0, -0.7, 0.0));
+    program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, light.getPos()) * glm::vec4(1, 1, 0, 1))));
+    program.uniform3fv("uLightIntensity", light.getIntensity());
 
-    // ViewMatrix             = glm::scale(ViewMatrix, scale);
-    // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrix));
-
-    // // ViewMatrix = viewMatrix * ViewMatrix;
-
-    // program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrix);
-    // program.uniformMatrix4fv("uMVMatrix", ViewMatrix);
-    // program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
-
-    // program.uniform3fv("uKd", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    // program.uniform3fv("uKs", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    // program.uniform1f("uShininess", 0.6);
-
-    // program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
-    // program.uniform3fv("uLightIntensity", (glm::vec3(5, 5, 5)));
+    // program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, posLight) * glm::vec4(1, 1, 0, 1))));
+    // program.uniform3fv("uLightIntensity", intensityLight);
 
     this->drawArray();
 }

@@ -9,6 +9,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
+#include "light.hpp"
 #include "model.hpp"
 #include "p6/p6.h"
 #include "player.hpp"
@@ -80,6 +81,8 @@ int main()
     ShaderText.addUniformVariable("uMVPMatrix");
     ShaderText.addUniformVariable("uMVMatrix");
     ShaderText.addUniformVariable("uNormalMatrix");
+
+    Light light(glm::vec3(0, 1, -3), glm::vec3{600});
 
     Model perso = Model();
     Model ile   = Model();
@@ -162,9 +165,15 @@ int main()
 
         // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
 
+        // light.drawLight(viewMatrix, ShaderPoint, ProjMatrix, NormalMatrix, glm::vec3(1., 1., 1.));
+
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
-        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
+        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, light, ProjMatrix, viewMatrix, ShaderPoint);
+
+        cube.draw();
+
+        // boid.draw(glm::vec3(0., -3., -5.), glm::vec3{0.2}, ProjMatrix, viewMatrix, ShaderPoint);
 
         // ShaderPoint.use();
 
@@ -201,7 +210,6 @@ int main()
         // ShaderPoint.use();
 
         // ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
-        // cube.draw();
 
         // debind vao
         glBindVertexArray(0);
