@@ -10,10 +10,10 @@ vec2 fCorrectCoords;
 // out vec3 fFragColor;
 out vec3 fFragColor;
 
-uniform sampler2D uTextDuck;
+uniform sampler2D uText;
 // uniform sampler2D uTextPerso;
 
 void main() {
-	vec4 textColor = texture(uTextDuck, vTexCoords);
+	vec4 textColor = texture(uText, vTexCoords);
 	fFragColor = textColor.xyz;
 }

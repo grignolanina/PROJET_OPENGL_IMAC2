@@ -50,8 +50,10 @@ int main()
     p6::Shader Shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/text3D.fs.glsl");
 
     // //load texture
-    img::Image img_ile  = p6::load_image_buffer("assets/textures/ile.png");
-    img::Image img_duck = p6::load_image_buffer("assets/textures/duck.jpg");
+    img::Image img_ile    = p6::load_image_buffer("assets/textures/blue.jpg");
+    img::Image img_duck   = p6::load_image_buffer("assets/textures/duck.jpg");
+    img::Image img_perso  = p6::load_image_buffer("assets/textures/persoBake.jpg");
+    img::Image img_oiseau = p6::load_image_buffer("assets/textures/oiseauBake.jpg");
 
     // recup variable uniforme
     GLint uMVPMatrix    = glGetUniformLocation(Shader.id(), "uMVPMatrix");
@@ -59,18 +61,22 @@ int main()
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
 
     // GLint uTextIle = glGetUniformLocation(Shader.id(), "uTextIle");
-    GLint uTextDuck = glGetUniformLocation(Shader.id(), "uTextDuck");
+    GLint uText = glGetUniformLocation(Shader.id(), "uText");
 
-    Model duck = Model();
-    Model ile  = Model();
-    duck.loadModel("duck.obj");
+    Model perso  = Model();
+    Model ile    = Model();
+    Model oiseau = Model();
+    perso.loadModel("persoBake.obj");
     ile.loadModel("ile_3D.obj");
+    oiseau.loadModel("oiseauBake.obj");
 
-    duck.setVbo();
+    perso.setVbo();
     ile.setVbo();
+    oiseau.setVbo();
 
-    duck.setVao();
+    perso.setVao();
     ile.setVao();
+    oiseau.setVao();
 
     // creation du vbo
     GLuint vbo = 0;
@@ -87,20 +93,37 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // initialisation de textures
-    GLuint textureIle;
-    glGenTextures(1, &textureIle);
-    glBindTexture(GL_TEXTURE_2D, textureIle);
+    // GLuint textureIle;
+    // glGenTextures(1, &textureIle);
+    // glBindTexture(GL_TEXTURE_2D, textureIle);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_ile.width(), img_ile.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_ile.data());
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_ile.width(), img_ile.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_ile.data());
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // glBindTexture(GL_TEXTURE_2D, 0);
+
+    // GLuint textureDuck;
+    // glGenTextures(1, &textureDuck);
+    // glBindTexture(GL_TEXTURE_2D, textureDuck);
+
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_duck.width(), img_duck.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_duck.data());
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // glBindTexture(GL_TEXTURE_2D, 0);
+    GLuint persoBake;
+    glGenTextures(1, &persoBake);
+    glBindTexture(GL_TEXTURE_2D, persoBake);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_perso.width(), img_perso.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_perso.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    GLuint textureDuck;
-    glGenTextures(1, &textureDuck);
-    glBindTexture(GL_TEXTURE_2D, textureDuck);
+    GLuint oiseauBake;
+    glGenTextures(1, &oiseauBake);
+    glBindTexture(GL_TEXTURE_2D, oiseauBake);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_duck.width(), img_duck.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_duck.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_oiseau.width(), img_oiseau.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_oiseau.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -189,25 +212,13 @@ int main()
 
         player.drawPlayer(viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
 
-        // // positionnement du draw du perso
-        // MVMatrix     = glm::translate(glm::mat4(1.0), glm::vec3(0., -3., -10.));
-        // MVMatrix     = glm::rotate(MVMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
-        // MVMatrix     = glm::scale(MVMatrix, glm::vec3{0.8});
-        // MVMatrix     = viewMatrix * MVMatrix;
-        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        // perso.draw();
-
-        // glUniform1i(uTextIle,0);
-
-        // // //positionnement du draw de l'ile
+        // //positionnement du draw de l'ile
         // MVMatrix = glm::translate(glm::mat4(1.0), glm::vec3(0., -5., -5.));
         // // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
         // MVMatrix     = glm::scale(MVMatrix, glm::vec3{5.});
         // MVMatrix     = viewMatrix * MVMatrix;
         // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // glUniform1i(uText, 0);
         // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
         // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
         // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
@@ -216,19 +227,35 @@ int main()
         // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         // ile.draw();
 
-        // //positionnement du duck
-        MVMatrix = glm::translate(glm::mat4(1.0), glm::vec3(0., -2., -5.));
+        // // //positionnement du perso
+        // MVMatrix     = glm::translate(glm::mat4(1.0), glm::vec3(0., -2., -5.));
         // MVMatrix     = glm::rotate(MVMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
+        // MVMatrix     = glm::scale(MVMatrix, glm::vec3{0.8});
+        // MVMatrix     = viewMatrix * MVMatrix;
+        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // glUniform1i(uText, 0);
+        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        // glBindTexture(GL_TEXTURE_2D, persoBake);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // perso.draw();
+
+        // // //positionnement du oiseau
+        MVMatrix     = glm::translate(glm::mat4(1.0), glm::vec3(0., -2., -5.));
+        MVMatrix     = glm::rotate(MVMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
         MVMatrix     = glm::scale(MVMatrix, glm::vec3{0.8});
         MVMatrix     = viewMatrix * MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        glUniform1i(uText, 0);
         glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
         glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
         glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        glBindTexture(GL_TEXTURE_2D, textureDuck);
+        glBindTexture(GL_TEXTURE_2D, oiseauBake);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        duck.draw();
+        oiseau.draw();
 
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids", &nbBoids, 0, 50, "%d", 0);
@@ -240,29 +267,29 @@ int main()
 
         // glBindTexture(GL_TEXTURE_2D, texturePerso);
 
-        for (int i = 0; i < nbBoids; i++)
-        {
-            // boidsTab[i].drawBoid(ctx);
-            // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        // for (int i = 0; i < nbBoids; i++)
+        // {
+        //     // boidsTab[i].drawBoid(ctx);
+        //     // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
-            // creation d'une nouvelle mv pour la moon
-            // glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -5.f}); // Translation
-            // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(boidsTab[i].randomSpeed())); // Translation * Rotation
-            // MVMatrixBoids = glm::translate(MVMatrixBoids, boidsTab[i].randomPos(ctx.aspect_ratio())); // Translation * Rotation * Translation
-            // MVMatrixBoids = glm::scale(MVMatrixBoids, glm::vec3{0.2f}); // Translation * Rotation * Translation * Scale
+        //     // creation d'une nouvelle mv pour la moon
+        //     // glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -5.f}); // Translation
+        //     // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(boidsTab[i].randomSpeed())); // Translation * Rotation
+        //     // MVMatrixBoids = glm::translate(MVMatrixBoids, boidsTab[i].randomPos(ctx.aspect_ratio())); // Translation * Rotation * Translation
+        //     // MVMatrixBoids = glm::scale(MVMatrixBoids, glm::vec3{0.2f}); // Translation * Rotation * Translation * Scale
 
-            // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixBoids));
-            // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
-            // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        //     // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrixBoids));
+        //     // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
+        //     // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-            // glUniform1i(uTextMoon,0);
+        //     // glUniform1i(uTextMoon,0);
 
-            boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, viewMatrix);
+        //     boidsTab[i].drawBoid3D(ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, viewMatrix);
 
-            glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        //     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
-            boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
-        }
+        //     boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
+        // }
 
         // debind vao
         glBindVertexArray(0);
@@ -273,7 +300,7 @@ int main()
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
     // perso.~Model();
-    glDeleteTextures(1, &textureIle);
+    // glDeleteTextures(1, &textureIle);
     // glDeleteTextures(1, &texturePerso);
 
     return 0;
