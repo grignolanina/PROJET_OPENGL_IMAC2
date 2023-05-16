@@ -9,6 +9,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
+#include "light.hpp"
 #include "model.hpp"
 #include "p6/p6.h"
 #include "player.hpp"
@@ -36,35 +37,15 @@ int main()
         boidsTab.push_back(randomBoids(ctx.aspect_ratio()));
     }
 
-    Cube cube(5.0f);
+    Cube cube(10.0f);
     // float radius = 0.02;
     float sRadius = 0.05;
     float cRadius = 0.2;
     float aRadius = 0.1;
     int   nbBoids = 20;
 
-    // load shaders
-    //  p6::Shader Shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normal.fs.glsl");
-    //  p6::Shader ShaderPoint = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
-    //  p6::Shader ShaderPoint = p6::load_shader("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
-
-    // //load texture
-    // img::Image img_terre = p6::load_image_buffer("assets/textures/EarthMap.jpg");
-    // img::Image img_lune = p6::load_image_buffer("assets/textures/MoonMap.jpg");
-
-    // // recup variable uniforme
-
-    // GLint uMVPMatrix    = glGetUniformLocation(ShaderPoint.id(), "uMVPMatrix");
-    // GLint uMVMatrix     = glGetUniformLocation(ShaderPoint.id(), "uMVMatrix");
-    // GLint uNormalMatrix = glGetUniformLocation(ShaderPoint.id(), "uNormalMatrix");
-    // GLint uKd        = glGetUniformLocation(ShaderPoint.id(), "uKd");
-    // GLint uKs        = glGetUniformLocation(ShaderPoint.id(), "uKs");
-    // GLint uShininess = glGetUniformLocation(ShaderPoint.id(), "uShininess");
-    // GLint uLightPos_vs    = glGetUniformLocation(ShaderPoint.id(), "uLightPos_vs");
-    // GLint uLightIntensity = glGetUniformLocation(ShaderPoint.id(), "uLightIntensity");
-
     //  //nouveau set
-    Program ShaderPoint("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
+    Program ShaderPoint("shaders/3D.vs.glsl", "shaders/multiplePointLight.fs.glsl");
     Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
 
     // // //nouveau set
@@ -76,6 +57,8 @@ int main()
     ShaderPoint.addUniformVariable("uShininess");
     ShaderPoint.addUniformVariable("uLightPos_vs");
     ShaderPoint.addUniformVariable("uLightIntensity");
+    ShaderPoint.addUniformVariable("uLightPos2_vs");
+    ShaderPoint.addUniformVariable("uLightIntensity2");
 
     ShaderText.addUniformVariable("uMVPMatrix");
     ShaderText.addUniformVariable("uMVMatrix");
@@ -146,6 +129,9 @@ int main()
     bool   down  = false;
     // bool jump = false; //pas géré
 
+    Light lightScene = Light(glm::vec3{30.});
+    Light lightPerso = Light(glm::vec3{0.01});
+
     ctx.update = [&]() {
         // ctx.background(p6::NamedColor::Blue);
 
@@ -160,19 +146,14 @@ int main()
         MVMatrix     = viewMatrix * MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-        // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
+        lightScene.drawLightScene(glm::vec3(-3., 6., -5.), ProjMatrix, viewMatrix, ShaderPoint);
+        lightPerso.drawLightPlayer(player.getPosition(), ProjMatrix, viewMatrix, ShaderPoint);
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
-        // ShaderPoint.use();
+        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
 
-        // // Lumière de la scène
-        // glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
-        // glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(2, 2, 2)));
-        // glUniform1f(uShininess, 0.1);
-        // glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(viewMatrix, glm::vec3(0, 0, -5)) * glm::vec4(1, 1, 1, 1))));
-        // glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(10, 10, 10)));
-        // //Fin lumière de la scène
+        cube.draw();
 
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids", &nbBoids, 0, 50, "%d", 0);
@@ -183,7 +164,6 @@ int main()
         ImGui::End();
 
         ShaderText.use();
-
         for (int i = 0; i < nbBoids; i++)
         {
             // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
@@ -193,12 +173,6 @@ int main()
 
             boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
         }
-
-        // draw de l'ile
-        ShaderText.use();
-
-        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderText);
-        cube.draw();
 
         // debind vao
         glBindVertexArray(0);

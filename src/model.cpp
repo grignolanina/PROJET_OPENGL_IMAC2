@@ -19,26 +19,19 @@ void Model::drawArray()
     // }
 }
 
-void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program& program)
+void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program)
 {
     glm::mat4 ViewMatrixModel = glm::translate(glm::mat4(1.0), pos);
     ViewMatrixModel           = glm::scale(ViewMatrixModel, scale);
+    ViewMatrixModel           = ViewMatrix * ViewMatrixModel;
 
     glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrixModel));
-
-    ViewMatrixModel = viewMatrix * ViewMatrixModel;
 
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrixModel);
     program.uniformMatrix4fv("uMVMatrix", ViewMatrixModel);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
 
-    // si on veut utiliser la lumière ici
-    //  program.uniform3fv("uKd", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    //  program.uniform3fv("uKs", (glm::vec3(0.1f, 0.1f, 0.1f)));
-    //  program.uniform1f("uShininess", 0.6);
-
-    // program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrixModel, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
-    // program.uniform3fv("uLightIntensity", (glm::vec3(0.5, 0.5, 0.5)));
+    // les params de lights sont définies avant
 
     this->drawArray();
 }
