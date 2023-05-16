@@ -5,7 +5,6 @@
 #include "glm/fwd.hpp"
 #include "glm/trigonometric.hpp"
 
-
 Player::Player()
     : m_PosPlayer(0., -2, -2.2){};
 
@@ -69,25 +68,13 @@ void Player::drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix
     program.uniformMatrix4fv("uMVMatrix", ViewMatrix);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
 
-    // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * ViewMatrix));
-    // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-    // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+    // //test
+    // program.uniform3fv("uKd", (glm::vec3(0.2f, 0.1f, 0.15f)));
+    // program.uniform3fv("uKs", (glm::vec3(0.2f, 0.1f, 0.1f)));
+    // program.uniform1f("uShininess", 0.6);
 
-    program.uniform3fv("uKd", (glm::vec3(0.2f, 0.1f, 0.15f)));
-    program.uniform3fv("uKs", (glm::vec3(0.2f, 0.1f, 0.1f)));
-    program.uniform1f("uShininess", 0.6);
-
-    // glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
-    // glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
-    // glUniform1f(uShininess, 0.6);
-
-    // glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::rotate(ViewMatrix, ctx.time(), glm::vec3(0, 1, 0)) * glm::vec4(1, 1, 0, 1))));
-
-    program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
-    program.uniform3fv("uLightIntensity", (glm::vec3(0.5, 0.5, 0.5)));
-
-    // glUniform3fv(uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
-    // glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
+    // program.uniform3fv("uLightPos_vs", (glm::vec3(glm::translate(ViewMatrix, glm::vec3(0, 5, 0)) * glm::vec4(1, 1, 0, 1))));
+    // program.uniform3fv("uLightIntensity", (glm::vec3(0.5, 0.5, 0.5)));
 
     model.drawArray();
 }

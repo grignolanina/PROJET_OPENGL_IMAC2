@@ -41,7 +41,12 @@ public:
     void drawArray();
 
     /// \brief set the drawSetup
-    void draw(glm::vec3 pos, glm::vec3 scale, Light light, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program);
+    /// \param pos position of the model
+    /// \param scale scale of the model
+    /// \param ProjMatrix matrice of projection for the shader
+    /// \param ViewMatrix viewMatrix (camera) for the shader
+    /// \param program shader will be used for drawing the model
+    void draw(glm::vec3 pos, glm::vec3 scales, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program);
 
     /// \brief get the ibo of the model
     // GLuint getIbo() const{

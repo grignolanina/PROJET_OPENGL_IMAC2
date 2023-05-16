@@ -44,6 +44,8 @@ void main() {
 	// vec3 normal = normalize(vNormal_vs);
     // fFragColor = normal.xzy;
 
+    
+
 	fFragColor = vec4(blinnPhong(),1.);
 	
     // fFragColor = texture(uTexture1, fCorrectCoords) + texture(uTexture2, fCorrectCoords);
