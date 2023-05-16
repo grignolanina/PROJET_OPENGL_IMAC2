@@ -27,9 +27,12 @@ void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4
 
     glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrixModel));
 
+    program.uniform1i("uTexture", 0);
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrixModel);
     program.uniformMatrix4fv("uMVMatrix", ViewMatrixModel);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
+
+    glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
 
     // les params de lights sont définies avant
 

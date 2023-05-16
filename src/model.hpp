@@ -5,6 +5,7 @@
 #include "light.hpp"
 #include "p6/p6.h"
 #include "program.hpp"
+#include "textureObj.hpp"
 
 class Model {
 protected:
@@ -12,7 +13,7 @@ protected:
     GLuint m_vao;
     // GLuint m_ibo;
     // bool m_isIbo = false;
-    // rendering::Texture m_texture; //pas encore géré
+    TextureObj                       m_texture;
     std::vector<glimac::ShapeVertex> m_vertices;
     std::vector<int>                 m_index;
     GLsizei                          m_vertexCount;
@@ -24,11 +25,11 @@ public:
      */
     /// \brief constructor param of the model class
     /// \param texture the texture of the model
-    // Model(rendering::Texture texture):
-    //     m_texture(texture)
-    //     {}
+    Model(TextureObj texture)
+        : m_texture(texture)
+    {}
     /// \brief default constructor
-    Model() = default;
+    // Model() = default;
 
     /// \brief cdelete model
     ~Model()

@@ -14,6 +14,7 @@
 #include "p6/p6.h"
 #include "player.hpp"
 #include "program.hpp"
+#include "textureObj.hpp"
 
 int main()
 {
@@ -48,6 +49,9 @@ int main()
     Program ShaderPoint("shaders/3D.vs.glsl", "shaders/multiplePointLight.fs.glsl");
     Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
 
+    TextureObj texturePerso("assets/textures/persoBake.jpg");
+    // TextureObj textureOiseau("oiseauBake.jpg");
+
     // // //nouveau set
     ShaderPoint.addUniformVariable("uMVPMatrix");
     ShaderPoint.addUniformVariable("uMVMatrix");
@@ -59,25 +63,28 @@ int main()
     ShaderPoint.addUniformVariable("uLightIntensity");
     ShaderPoint.addUniformVariable("uLightPos2_vs");
     ShaderPoint.addUniformVariable("uLightIntensity2");
+    ShaderPoint.addUniformVariable("uTexture");
 
     ShaderText.addUniformVariable("uMVPMatrix");
     ShaderText.addUniformVariable("uMVMatrix");
     ShaderText.addUniformVariable("uNormalMatrix");
 
-    Model perso = Model();
-    Model ile   = Model();
-    Model boid  = Model();
-    perso.loadModel("perso.obj");
-    ile.loadModel("ile.obj");
-    boid.loadModel("oiseau.obj");
+    Model perso(texturePerso);
 
-    perso.setVbo();
-    ile.setVbo();
-    boid.setVbo();
+    // Model perso = Model();
+    // Model ile   = Model();
+    // Model boid  = Model();
+    // perso.loadModel("perso.obj");
+    // ile.loadModel("ile.obj");
+    // boid.loadModel("oiseau.obj");
 
-    perso.setVao();
-    ile.setVao();
-    boid.setVao();
+    // perso.setVbo();
+    // ile.setVbo();
+    // boid.setVbo();
+
+    // perso.setVao();
+    // ile.setVao();
+    // boid.setVao();
 
     // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
     // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
@@ -151,7 +158,7 @@ int main()
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
-        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
+        // ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
 
         cube.draw();
 
@@ -163,16 +170,16 @@ int main()
         ImGui::SliderFloat("Alignement", &aRadius, 0.f, 0.5f, "%.3f", 0);
         ImGui::End();
 
-        ShaderText.use();
-        for (int i = 0; i < nbBoids; i++)
-        {
-            // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
-            boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, viewMatrix, ShaderText);
+        // ShaderText.use();
+        // for (int i = 0; i < nbBoids; i++)
+        // {
+        //     // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
+        //     boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, viewMatrix, ShaderText);
 
-            // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        //     // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
-            boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
-        }
+        //     boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
+        // }
 
         // debind vao
         glBindVertexArray(0);
