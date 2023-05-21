@@ -31,6 +31,7 @@ class Player{
 	glm::vec3 m_Position; //camera position
 	float m_Phi; //coord spherique de F
 	float m_Theta; //coord spherique de F
+	float m_RotationAngle;
 
 	glm::vec3 m_FrontVector; //vecteur F
 	glm::vec3 m_LeftVector; //vecteur L
@@ -45,6 +46,9 @@ class Player{
 
     void setPosition(glm::vec3 posPlayer);
     glm::vec3 getPosition();
+
+	void setRotationAngle(float rotationAngle);
+	float getRotationAngle() const;
 
 	void moveLeft(float t); //deplacer la cam le long du vecteur L
 	void moveFront(float t); //deplacer la cam le long di vecteur F

@@ -18,6 +18,7 @@ protected:
     std::vector<glimac::ShapeVertex> m_vertices;
     std::vector<int> m_index; 
     GLsizei m_vertexCount;
+    float m_Rotation;
 
 public:
     
@@ -41,6 +42,8 @@ public:
 	
 	/// \brief draw the model
     void drawArray();
+
+    void setRotation(float angle);
 
     /// \brief set the drawSetup
     void draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program &program);

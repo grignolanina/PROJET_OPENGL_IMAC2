@@ -12,13 +12,13 @@ private:
 	float distance;
 	float height;
 	Player m_player;
+    Model& m_model;
 
 
 
 
 public:
-    explicit Camera(Player& player);// constructeur par défaut
-	// Camera(Player& player, GLfloat horizontal, GLfloat vertical, GLfloat distance); // Constructeur
+    explicit Camera(Player& player, Model& model);// constructeur par défaut
     void update(glm::mat4 &viewMatrix); // Update les positions de la cam pour pouvoir bouger en même temps que le personnage
 };
 

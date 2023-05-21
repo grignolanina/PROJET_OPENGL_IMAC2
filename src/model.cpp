@@ -52,7 +52,12 @@ void Model::setVbo(){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Model::setRotation(float angle)
+{
+    angle = glm::mod(angle, glm::two_pi<float>());
 
+    m_Rotation = angle;
+}
 
 // void Model::setIbo(){
 //     GLuint ibo;
