@@ -23,5 +23,6 @@ void Camera::update(glm::mat4& ViewMatrix)
     // Mise à jour de la vue de la caméra
     ViewMatrix = glm::lookAt(cameraPos, playerPos, glm::vec3(0.0f, 1.0f, 0.0f));
     m_model.setRotation(m_player.getRotationAngle()); 
+    
 }
 
