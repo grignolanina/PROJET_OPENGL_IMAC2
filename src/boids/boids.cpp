@@ -96,13 +96,11 @@ void Boid::stayInWindows(p6::Context& ctx)
     {
         m_speed.x -= 0.05;
     }
-    if (m_pos.y < -1 + m_size)
-    {
+    if(m_pos.y < m_size){
         m_speed.y += 0.05;
     }
-    if (m_pos.y > 1 - m_size)
-    {
-        m_speed.y -= 0.05;
+    if(m_pos.y > 2-m_size){
+        m_speed.y -=0.05;
     }
     if (m_pos.z < -1 + m_size)
     {

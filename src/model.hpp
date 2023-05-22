@@ -14,8 +14,9 @@ protected:
     // bool m_isIbo = false;
     // rendering::Texture m_texture; //pas encore géré
     std::vector<glimac::ShapeVertex> m_vertices;
-    std::vector<int>                 m_index;
-    GLsizei                          m_vertexCount;
+    std::vector<int> m_index; 
+    GLsizei m_vertexCount;
+    float m_Rotation;
 
 public:
     /*!
@@ -39,6 +40,8 @@ public:
 
     /// \brief draw the model
     void drawArray();
+
+    void setRotation(float angle);
 
     /// \brief set the drawSetup
     /// \param pos position of the model

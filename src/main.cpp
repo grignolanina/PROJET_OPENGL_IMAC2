@@ -37,7 +37,6 @@ int main()
         boidsTab.push_back(randomBoids(ctx.aspect_ratio()));
     }
 
-    Cube cube(10.0f);
     // float radius = 0.02;
     float sRadius = 0.05;
     float cRadius = 0.2;
@@ -47,8 +46,10 @@ int main()
     //  //nouveau set
     Program ShaderPoint("shaders/3D.vs.glsl", "shaders/multiplePointLight.fs.glsl");
     Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
+    Program ShaderCube("shaders/2Dnuages.vs.glsl", "shaders/2Dnuages.fs.glsl");
 
-    // // //nouveau set
+    img::Image Texture = p6::load_image_buffer("assets/textures/nuages.jpg");
+
     ShaderPoint.addUniformVariable("uMVPMatrix");
     ShaderPoint.addUniformVariable("uMVMatrix");
     ShaderPoint.addUniformVariable("uNormalMatrix");
@@ -64,6 +65,12 @@ int main()
     ShaderText.addUniformVariable("uMVMatrix");
     ShaderText.addUniformVariable("uNormalMatrix");
 
+    ShaderCube.addUniformVariable("uTexture");
+    // ShaderCube.addUniformVariable("uModelMatrix");
+    ShaderCube.addUniformVariable("uMVPMatrix");
+    ShaderCube.addUniformVariable("uMVMatrix");
+    ShaderCube.addUniformVariable("uNormalMatrix");
+
     Model perso = Model();
     Model ile   = Model();
     Model boid  = Model();
@@ -78,7 +85,7 @@ int main()
     perso.setVao();
     ile.setVao();
     boid.setVao();
-
+    Cube cube(5.0f, ShaderText, Texture);
     // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
     // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
@@ -122,7 +129,7 @@ int main()
     ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
 
     Player player;
-    Camera camera(player);
+    Camera camera(player, perso);
     bool   right = false;
     bool   left  = false;
     bool   up    = false;
@@ -131,12 +138,14 @@ int main()
 
     Light lightScene = Light(glm::vec3{30.});
     Light lightPerso = Light(glm::vec3{0.01});
-
     ctx.update = [&]() {
         // ctx.background(p6::NamedColor::Blue);
 
-        cameraOption(camera, left, right, up, down, ctx);
-        glm::mat4 viewMatrix = camera.update();
+        cameraOption(player, left, right, up, down, ctx);
+        glm::mat4 viewMatrix = player.getViewMatrix();
+
+        camera.update(viewMatrix);
+
         ShaderPoint.use();
 
         glClearColor(0.0f, 0.1f, 0.6f, 1.f);
@@ -150,10 +159,11 @@ int main()
         lightPerso.drawLightPlayer(player.getPosition(), ProjMatrix, viewMatrix, ShaderPoint);
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
+        // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
 
         ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
+        player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
-        cube.draw();
 
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids", &nbBoids, 0, 50, "%d", 0);
@@ -164,6 +174,7 @@ int main()
         ImGui::End();
 
         ShaderText.use();
+
         for (int i = 0; i < nbBoids; i++)
         {
             // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
@@ -174,6 +185,9 @@ int main()
             boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
         }
 
+        ShaderCube.use();
+        cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
+        cube.clampPlayerPosition(player);
         // debind vao
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);
