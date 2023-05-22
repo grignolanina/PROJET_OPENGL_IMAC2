@@ -35,7 +35,6 @@ int main()
         boidsTab.push_back(randomBoids(ctx.aspect_ratio()));
     }
 
-    
     // float radius = 0.02;
     float sRadius = 0.05;
     float cRadius = 0.2;
@@ -67,7 +66,7 @@ int main()
     Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
     Program ShaderCube("shaders/2Dnuages.vs.glsl", "shaders/2Dnuages.fs.glsl");
 
-    img::Image Texture = p6::load_image_buffer("/Users/keziahapaloo-kingslove/Documents/IMAC/Semestre_4/prog_TD/Projet/PROJET_OPENGL_IMAC2/assets/textures/nuages.jpg");
+    img::Image Texture = p6::load_image_buffer("assets/textures/nuages.jpg");
 
     ShaderPoint.addUniformVariable("uMVPMatrix");
     ShaderPoint.addUniformVariable("uMVMatrix");
@@ -102,7 +101,7 @@ int main()
     perso.setVao();
     ile.setVao();
     boid.setVao();
-    Cube cube(5.0f, ShaderText,Texture);
+    Cube cube(5.0f, ShaderText, Texture);
     // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
     // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
@@ -146,7 +145,7 @@ int main()
     ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
 
     Player player;
-    Camera camera(player,perso );
+    Camera camera(player, perso);
     bool   right = false;
     bool   left  = false;
     bool   up    = false;
@@ -157,7 +156,7 @@ int main()
         // ctx.background(p6::NamedColor::Blue);
 
         cameraOption(player, left, right, up, down, ctx);
-        glm::mat4 viewMatrix =player.getViewMatrix() ;
+        glm::mat4 viewMatrix = player.getViewMatrix();
 
         camera.update(viewMatrix);
 
@@ -208,9 +207,9 @@ int main()
         ShaderText.use();
 
         ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderText);
-       
+
         ShaderCube.use();
-        cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.},ShaderCube,viewMatrix, ProjMatrix);
+        cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
         cube.clampPlayerPosition(player);
         // debind vao
         glBindVertexArray(0);
