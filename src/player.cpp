@@ -19,11 +19,11 @@ glm::vec3 Player::getPosition()
 }
 
 float Player::getRotationAngle() const {
-    return m_RotationAngle; // Remplacez m_RotationAngle par la variable ou la valeur appropriée contenant l'angle de rotation de votre modèle
+    return m_RotationAngle; 
 }
 
 void Player::setRotationAngle(float rotationAngle) {
-    m_RotationAngle = rotationAngle; // Remplacez m_RotationAngle par la variable ou la valeur appropriée contenant l'angle de rotation de votre modèle
+    m_RotationAngle = rotationAngle; 
 }
 
 

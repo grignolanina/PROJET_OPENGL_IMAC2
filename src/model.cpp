@@ -20,6 +20,7 @@ void Model::drawArray(){
 }
 
 void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program &program){
+    
     glm::mat4 ViewMatrixModel = glm::translate(glm::mat4(1.0), pos);
     ViewMatrixModel = glm::scale(ViewMatrixModel, scale);
 
@@ -57,6 +58,10 @@ void Model::setRotation(float angle)
     angle = glm::mod(angle, glm::two_pi<float>());
 
     m_Rotation = angle;
+}
+
+float Model::getRotationAngle() const {
+    return m_Rotation; 
 }
 
 // void Model::setIbo(){

@@ -44,6 +44,7 @@ public:
     void drawArray();
 
     void setRotation(float angle);
+    float getRotationAngle() const;
 
     /// \brief set the drawSetup
     void draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 viewMatrix, Program &program);

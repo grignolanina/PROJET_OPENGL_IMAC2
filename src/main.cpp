@@ -170,10 +170,8 @@ int main()
         MVMatrix     = viewMatrix * MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-        
-
         // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
-
+        
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
         // ShaderPoint.use();
