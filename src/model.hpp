@@ -14,9 +14,9 @@ protected:
     // bool m_isIbo = false;
     // rendering::Texture m_texture; //pas encore géré
     std::vector<glimac::ShapeVertex> m_vertices;
-    std::vector<int> m_index; 
-    GLsizei m_vertexCount;
-    float m_Rotation;
+    std::vector<int>                 m_index;
+    GLsizei                          m_vertexCount;
+    float                            m_Rotation;
 
 public:
     /*!

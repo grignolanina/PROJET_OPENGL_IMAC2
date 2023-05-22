@@ -6,16 +6,8 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "model.hpp"
 #include "p6/p6.h"
-#include "program.hpp"
 #include "player.hpp"
-
-class Cube{
-    private:
-        std::vector<float> vertices;
-        std::vector<GLuint> indices;
-        GLuint vao, vbo, ibo;
-        float m_size;
-        GLuint texture;
+#include "program.hpp"
 
 class Cube {
 private:
@@ -23,11 +15,19 @@ private:
     std::vector<GLuint> indices;
     GLuint              vao, vbo, ibo;
     float               m_size;
+    GLuint              texture;
 
-        Cube(float size,  Program &program, img::Image &img_load);
-        void clampPlayerPosition(Player &player);
-        void draw(glm::vec3 pos, glm::vec3 scale,Program& program,glm::mat4 viewMatrix, glm::mat4 ProjMatrix) const;
-        
+    // class Cube {
+    // private:
+    //     std::vector<float>  vertices;
+    //     std::vector<GLuint> indices;
+    //     GLuint              vao, vbo, ibo;
+    //     float               m_size;
+
+public:
+    Cube(float size, img::Image& img_load);
+    void clampPlayerPosition(Player& player);
+    void draw(glm::vec3 pos, glm::vec3 scale, Program& program, glm::mat4 viewMatrix, glm::mat4 ProjMatrix) const;
 };
 
 void display();

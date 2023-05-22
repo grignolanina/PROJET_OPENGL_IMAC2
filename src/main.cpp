@@ -85,7 +85,7 @@ int main()
     perso.setVao();
     ile.setVao();
     boid.setVao();
-    Cube cube(5.0f, ShaderText, Texture);
+    Cube cube(5.0f, Texture);
     // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
     // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
@@ -138,7 +138,7 @@ int main()
 
     Light lightScene = Light(glm::vec3{30.});
     Light lightPerso = Light(glm::vec3{0.01});
-    ctx.update = [&]() {
+    ctx.update       = [&]() {
         // ctx.background(p6::NamedColor::Blue);
 
         cameraOption(player, left, right, up, down, ctx);
@@ -164,6 +164,9 @@ int main()
         ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
+        ShaderCube.use();
+        cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
+        cube.clampPlayerPosition(player);
 
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids", &nbBoids, 0, 50, "%d", 0);
@@ -185,9 +188,6 @@ int main()
             boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
         }
 
-        ShaderCube.use();
-        cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
-        cube.clampPlayerPosition(player);
         // debind vao
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);

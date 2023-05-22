@@ -2,7 +2,7 @@
 #include "player.hpp"
 #include "program.hpp"
 
-Cube::Cube(float size, Program& program, img::Image& img_load)
+Cube::Cube(float size, img::Image& img_load)
     : m_size(size), texture(0)
 
 {
