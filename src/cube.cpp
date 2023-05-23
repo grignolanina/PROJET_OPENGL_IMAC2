@@ -2,15 +2,8 @@
 #include "player.hpp"
 #include "program.hpp"
 
-Cube::Cube(float size, img::Image& img_load)
-    : m_size(size), texture(0)
-
+void Cube::textures(img::Image& img_load)
 {
-    // Calculer les coordonnées des sommets
-    float x = size / 4.7f;
-    float y = size / 3.0f;
-    float z = size / 4.0f;
-
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_load.width(), img_load.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_load.data());
@@ -22,6 +15,14 @@ Cube::Cube(float size, img::Image& img_load)
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+}
+
+void Cube::vectors()
+{
+    // Calculer les coordonnées des sommets
+    float x = m_size / 4.7f;
+    float y = m_size / 3.0f;
+    float z = m_size / 4.0f;
 
     vertices = {
         // Face avant
@@ -139,7 +140,10 @@ Cube::Cube(float size, img::Image& img_load)
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+}
 
+void Cube::vertex()
+{
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_NORMAL   = 1;
     const GLuint VERTEX_ATTR_UV       = 2;
@@ -161,6 +165,21 @@ Cube::Cube(float size, img::Image& img_load)
     glBindVertexArray(0);
 }
 
+Cube::Cube(float size)
+    : m_size(size), texture(0)
+
+{
+}
+
+void Cube::init(img::Image& img_load)
+{
+    textures(img_load);
+
+    vectors();
+
+    vertex();
+}
+
 void Cube::draw(glm::vec3 pos, glm::vec3 scale, Program& program, glm::mat4 viewMatrix, glm::mat4 ProjMatrix) const
 {
     glm::mat4 ViewMatrixModel = glm::translate(glm::mat4(1.0), pos);
@@ -178,12 +197,12 @@ void Cube::draw(glm::vec3 pos, glm::vec3 scale, Program& program, glm::mat4 view
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }
 
-void Cube::clampPlayerPosition(Player& player)
+void Cube::borders(Player& player)
 {
     glm::vec3 playerPosition = player.getPosition();
 
-    float minX = -m_size / 2.f;
-    float maxX = m_size / 2.f;
+    float minX = -m_size / 1.5f;
+    float maxX = m_size / 1.5f;
     float minZ = -m_size * 2;
     float maxZ = m_size / 6.5f;
 

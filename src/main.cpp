@@ -11,8 +11,8 @@
 #include "img/src/Image.h"
 #include "light.hpp"
 #include "model.hpp"
+#include "obstacle.hpp"
 #include "p6/p6.h"
-#include "player.hpp"
 #include "program.hpp"
 
 int main()
@@ -85,7 +85,8 @@ int main()
     perso.setVao();
     ile.setVao();
     boid.setVao();
-    Cube cube(5.0f, Texture);
+    Cube cube(5.0f);
+    cube.init(Texture);
     // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
     // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
@@ -134,6 +135,12 @@ int main()
     bool   left  = false;
     bool   up    = false;
     bool   down  = false;
+
+    glm::vec3 obstaclePosition(0.0f, -5.0f, -2.0f);
+    float     obstacleSize = 0.5f;
+    Obstacle  obstacle(obstaclePosition, obstacleSize);
+    glm::vec3 playerPosition = player.getPosition();
+
     // bool jump = false; //pas géré
 
     Light lightScene = Light(glm::vec3{30.});
@@ -159,14 +166,15 @@ int main()
         lightPerso.drawLightPlayer(player.getPosition(), ProjMatrix, viewMatrix, ShaderPoint);
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
+
         // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
 
         ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
-        player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
-
+        // player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
         ShaderCube.use();
         cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
-        cube.clampPlayerPosition(player);
+        cube.borders(player);
+        obstacle.avoid(playerPosition);
 
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids", &nbBoids, 0, 50, "%d", 0);

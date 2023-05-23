@@ -7,7 +7,7 @@
 #include "player.hpp"
 
 Camera::Camera(Player& player, Model& model)
-    : m_player(player), m_model(model), distance(0.5f), height(0.4f) {}
+    : m_player(player), m_model(model), distance(0.5f), height(0.2f) {}
 
 void Camera::update(glm::mat4& ViewMatrix)
 {
