@@ -1,10 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "../game/player.hpp"
+#include "../src/game/include/player.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
-
 
 class Camera {
 private:

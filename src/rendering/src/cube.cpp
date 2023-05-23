@@ -1,6 +1,6 @@
-#include "cube.hpp"
-#include "../game/player.hpp"
-#include "program.hpp"
+#include "../src/rendering/include/cube.hpp"
+#include "../src/game/include/player.hpp"
+#include "../src/rendering/include/program.hpp"
 
 Cube::Cube(float size)
     : m_size(size), texture(0)

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../rendering/model.hpp"
-#include "../rendering/program.hpp"
+#include "../src/rendering/include/model.hpp"
+#include "../src/rendering/include/program.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 

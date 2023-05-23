@@ -1,4 +1,4 @@
-#include "boids.hpp"
+#include "../src/boids/include/boids.hpp"
 #include <cstdlib>
 // #include <cstdlib.h>
 #include "glm/fwd.hpp"

@@ -1,4 +1,4 @@
-#include "light.hpp"
+#include "../src/rendering/include/light.hpp"
 #include "glm/fwd.hpp"
 
 void Light::drawLightScene(glm::vec3 pos, glm::mat4 projMatrix, glm::mat4 viewMatrix, Program& program)

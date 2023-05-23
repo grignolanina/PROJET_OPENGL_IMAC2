@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "../rendering/model.hpp"
-#include "../rendering/program.hpp"
+#include "../src/rendering/include/model.hpp"
+#include "../src/rendering/include/program.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"

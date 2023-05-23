@@ -1,9 +1,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "../src/game/include/player.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
-#include "player.hpp"
+
 
 class Obstacle {
 private:

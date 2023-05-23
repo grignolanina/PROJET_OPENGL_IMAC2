@@ -1,11 +1,10 @@
-#include "camera.hpp"
+#include "../src/rendering/include/camera.hpp"
 #include <p6/p6.h>
 #include <cmath>
-#include "../game/player.hpp"
+#include "../src/game/include/player.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/trigonometric.hpp"
-
 
 Camera::Camera(Player& player, Model& model)
     : m_player(player), m_model(model), distance(0.5f), height(0.2f) {}

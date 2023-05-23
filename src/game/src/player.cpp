@@ -1,4 +1,4 @@
-#include "player.hpp"
+#include "../src/game/include/player.hpp"
 #include <p6/p6.h>
 #include <vector>
 #include "glm/ext/matrix_transform.hpp"

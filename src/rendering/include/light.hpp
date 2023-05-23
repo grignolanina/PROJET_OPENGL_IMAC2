@@ -1,9 +1,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "../src/rendering/include/program.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
-#include "program.hpp"
+
 
 class Light {
 private:

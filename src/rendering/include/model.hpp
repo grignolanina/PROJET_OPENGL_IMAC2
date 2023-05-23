@@ -1,10 +1,11 @@
 #pragma once
 
 #include <glimac/common.hpp>
+#include "../src/rendering/include/light.hpp"
+#include "../src/rendering/include/program.hpp"
 #include "glm/fwd.hpp"
-#include "light.hpp"
 #include "p6/p6.h"
-#include "program.hpp"
+
 
 class Model {
 protected:

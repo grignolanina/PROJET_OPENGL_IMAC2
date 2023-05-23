@@ -1,14 +1,13 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "../game/player.hpp"
+#include "../src/game/include/player.hpp"
+#include "../src/rendering/include/program.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "model.hpp"
 #include "p6/p6.h"
-#include "program.hpp"
-
 
 class Cube {
 private:

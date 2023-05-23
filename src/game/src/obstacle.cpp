@@ -1,4 +1,4 @@
-#include "obstacle.hpp"
+#include "../src/game/include/obstacle.hpp"
 
 Obstacle::Obstacle(const glm::vec3& position, float size)
     : position(position), size(size)

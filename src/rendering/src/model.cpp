@@ -1,4 +1,4 @@
-#include "model.hpp"
+#include "../src/rendering/include/model.hpp"
 #include <glimac/common.hpp>
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"

@@ -1,20 +1,20 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
-#include "boids/boids.hpp"
-#include "game/obstacle.hpp"
+#include "boids/include/boids.hpp"
+#include "game/include/obstacle.hpp"
 #include "glimac/common.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
 #include "p6/p6.h"
-#include "rendering/camera.hpp"
-#include "rendering/cube.hpp"
-#include "rendering/light.hpp"
-#include "rendering/model.hpp"
-#include "rendering/program.hpp"
-#include "rendering/texture.hpp"
+#include "rendering/include/camera.hpp"
+#include "rendering/include/cube.hpp"
+#include "rendering/include/light.hpp"
+#include "rendering/include/model.hpp"
+#include "rendering/include/program.hpp"
+#include "rendering/include/texture.hpp"
 
 int main()
 {

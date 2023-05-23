@@ -1,4 +1,4 @@
-#include "program.hpp"
+#include "../src/rendering/include/program.hpp"
 #include <p6/p6.h>
 #include <string>
 #include <utility>
