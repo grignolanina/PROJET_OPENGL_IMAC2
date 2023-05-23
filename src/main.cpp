@@ -2,19 +2,19 @@
 #include <iostream>
 #include <vector>
 #include "boids/boids.hpp"
-#include "camera.hpp"
-#include "cube.hpp"
+#include "game/obstacle.hpp"
 #include "glimac/common.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
-#include "light.hpp"
-#include "model.hpp"
-#include "obstacle.hpp"
 #include "p6/p6.h"
-#include "program.hpp"
-#include "texture.hpp"
+#include "rendering/camera.hpp"
+#include "rendering/cube.hpp"
+#include "rendering/light.hpp"
+#include "rendering/model.hpp"
+#include "rendering/program.hpp"
+#include "rendering/texture.hpp"
 
 int main()
 {
@@ -33,20 +33,15 @@ int main()
     std::vector<Boid> boidsTab;
     for (int i = 0; i < 50; i++)
     {
-        // Boid T = randomBoids(ctx.aspect_ratio());
-        // boidsTab.push_back(T);
         boidsTab.push_back(randomBoids(ctx.aspect_ratio()));
     }
 
-    // float radius = 0.02;
     float sRadius = 0.05;
     float cRadius = 0.2;
     float aRadius = 0.1;
     int   nbBoids = 20;
 
-    //  //nouveau set
     Program ShaderPoint("shaders/3D.vs.glsl", "shaders/multiplePointLight.fs.glsl");
-    // Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
     Program ShaderCube("shaders/2Dnuages.vs.glsl", "shaders/2Dnuages.fs.glsl");
 
     img::Image Texture    = p6::load_image_buffer("assets/textures/nuages.jpg");
