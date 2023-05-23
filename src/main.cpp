@@ -50,7 +50,7 @@ int main()
     p6::Shader Shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/text3D.fs.glsl");
 
     // //load texture
-    img::Image img_ile    = p6::load_image_buffer("assets/textures/blue.jpg");
+    img::Image img_ile    = p6::load_image_buffer("assets/textures/textureIleBlake.png");
     img::Image img_duck   = p6::load_image_buffer("assets/textures/duck.jpg");
     img::Image img_perso  = p6::load_image_buffer("assets/textures/persoBake.jpg");
     img::Image img_oiseau = p6::load_image_buffer("assets/textures/oiseauBake.jpg");
@@ -61,13 +61,15 @@ int main()
     GLint uNormalMatrix = glGetUniformLocation(Shader.id(), "uNormalMatrix");
 
     // GLint uTextIle = glGetUniformLocation(Shader.id(), "uTextIle");
-    GLint uText = glGetUniformLocation(Shader.id(), "uText");
+    GLint uTextIle = glGetUniformLocation(Shader.id(), "uText");
+    // GLint uTextPerso = glGetUniformLocation(Shader.id(), "uText");
+    // GLint uTextOisea = glGetUniformLocation(Shader.id(), "uText");
 
     Model perso  = Model();
     Model ile    = Model();
     Model oiseau = Model();
     perso.loadModel("persoBake.obj");
-    ile.loadModel("ile_3D.obj");
+    ile.loadModel("ileBake.obj");
     oiseau.loadModel("oiseauBake.obj");
 
     perso.setVbo();
@@ -124,6 +126,15 @@ int main()
     glBindTexture(GL_TEXTURE_2D, oiseauBake);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_oiseau.width(), img_oiseau.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_oiseau.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    GLuint ileBake;
+    glGenTextures(1, &ileBake);
+    glBindTexture(GL_TEXTURE_2D, ileBake);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_ile.width(), img_ile.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_ile.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -213,19 +224,19 @@ int main()
         player.drawPlayer(viewMatrix, vertices, ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix);
 
         // //positionnement du draw de l'ile
-        // MVMatrix = glm::translate(glm::mat4(1.0), glm::vec3(0., -5., -5.));
-        // // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
-        // MVMatrix     = glm::scale(MVMatrix, glm::vec3{5.});
-        // MVMatrix     = viewMatrix * MVMatrix;
-        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        // glUniform1i(uText, 0);
-        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        // glBindTexture(GL_TEXTURE_2D, textureIle);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        // ile.draw();
+        MVMatrix = glm::translate(glm::mat4(1.0), glm::vec3(0., -5., -5.));
+        // MVMatrix = glm::rotate(MVMatrix, p6::Angle(90) ,glm::vec3(0, 1, 0));
+        MVMatrix     = glm::scale(MVMatrix, glm::vec3{5.});
+        MVMatrix     = viewMatrix * MVMatrix;
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        glUniform1i(uText, 0);
+        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        glBindTexture(GL_TEXTURE_2D, ileBake);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        ile.draw();
 
         // // //positionnement du perso
         // MVMatrix     = glm::translate(glm::mat4(1.0), glm::vec3(0., -2., -5.));
@@ -243,19 +254,19 @@ int main()
         // perso.draw();
 
         // // //positionnement du oiseau
-        MVMatrix     = glm::translate(glm::mat4(1.0), glm::vec3(0., -2., -5.));
-        MVMatrix     = glm::rotate(MVMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
-        MVMatrix     = glm::scale(MVMatrix, glm::vec3{0.8});
-        MVMatrix     = viewMatrix * MVMatrix;
-        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        glUniform1i(uText, 0);
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        glBindTexture(GL_TEXTURE_2D, oiseauBake);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        oiseau.draw();
+        // MVMatrix     = glm::translate(glm::mat4(1.0), glm::vec3(0., -2., -5.));
+        // MVMatrix     = glm::rotate(MVMatrix, glm::radians(180.0f), glm::vec3(0, 1, 0));
+        // MVMatrix     = glm::scale(MVMatrix, glm::vec3{0.8});
+        // MVMatrix     = viewMatrix * MVMatrix;
+        // NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // glUniform1i(uText, 0);
+        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        // glBindTexture(GL_TEXTURE_2D, oiseauBake);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // oiseau.draw();
 
         ImGui::Begin("Params");
         ImGui::SliderInt("Nb boids", &nbBoids, 0, 50, "%d", 0);
