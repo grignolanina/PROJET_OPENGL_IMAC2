@@ -139,8 +139,8 @@ int main()
     bool   down  = false;
     // bool jump = false; //pas géré
 
-    Light lightScene = Light(glm::vec3{90.});
-    Light lightPerso = Light(glm::vec3{0.01});
+    Light lightScene = Light(glm::vec3{100.});
+    Light lightPerso = Light(glm::vec3{0.0001});
     ctx.update       = [&]() {
         // ctx.background(p6::NamedColor::Blue);
 
@@ -158,7 +158,7 @@ int main()
         MVMatrix     = viewMatrix * MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-        lightScene.drawLightScene(glm::vec3(-4., 5., -8.), ProjMatrix, viewMatrix, ShaderPoint);
+        lightScene.drawLightScene(glm::vec3(0., 5., -5.), ProjMatrix, viewMatrix, ShaderPoint);
         lightPerso.drawLightPlayer(player.getPosition(), ProjMatrix, viewMatrix, ShaderPoint);
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint, persoBake);
