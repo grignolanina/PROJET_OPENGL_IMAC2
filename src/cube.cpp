@@ -2,6 +2,11 @@
 #include "player.hpp"
 #include "program.hpp"
 
+Cube::Cube(float size)
+    : m_size(size), texture(0)
+{
+}
+
 void Cube::textures(img::Image& img_load)
 {
     glGenTextures(1, &texture);
@@ -163,12 +168,6 @@ void Cube::vertex()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(0);
-}
-
-Cube::Cube(float size)
-    : m_size(size), texture(0)
-
-{
 }
 
 void Cube::init(img::Image& img_load)

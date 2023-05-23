@@ -19,26 +19,69 @@ private:
     glm::vec3 m_LeftVector;  // vecteur L
     glm::vec3 m_UpVector;    // vecteur U
 
+    ///\brief Computes the direction vectors (front, left, up) based on the current angles
     void computeDirectionVectors();
 
 public:
+    ///\brief defaut constructor
     Player();
+
+    ///\brief param constructor
+    ///\param position The initial position of the player
+    /// \param phi The initial phi angle (rotation around the y-axis) of the player's orientation
+    /// \param theta The initial theta angle (rotation around the x-axis) of the player's orientation
     Player(glm::vec3 position, float phi, float theta);
 
-    void      setPosition(glm::vec3 posPlayer);
+    ///\brief destructor of the player
+    ~Player() = default;
+
+    ///\brief setter of the position of the player
+    ///\param posPlayer the player's position
+    void setPosition(glm::vec3 posPlayer);
+
+    ///\brief getter of the position of the player
     glm::vec3 getPosition();
 
-    void  setRotationAngle(float rotationAngle);
+    ///\brief setter of the rotation's angle of the player
+    ///\param rotationAngle the player's rotation angle
+    void setRotationAngle(float rotationAngle);
+
+    ///\brief getter of the rotation's angle of the player
     float getRotationAngle() const;
 
-    void moveLeft(float t);  // deplacer la cam le long du vecteur L
-    void moveFront(float t); // deplacer la cam le long di vecteur F
+    ///\brief move the player (the camera) belong the vector L
+    ///\param t value of displacement
+    void moveLeft(float t);
 
-    void rotateLeft(float degrees); // modifie la rotation de la cam axe horizontal
-    void rotateUp(float degrees);   // modifie la rotation de la cam axe vertical
+    ///\brief move the player (the camera) belong the vector F
+    ///\param t value of displacement
+    void moveFront(float t);
 
+    ///\brief rotation the player (the camera) belon the horizontal axe
+    ///\param degrees value of the rotation
+    void rotateLeft(float degrees);
+
+    ///\brief rotation the player (the camera) belon the vertical axe
+    ///\param degrees value of the rotation
+    void rotateUp(float degrees);
+
+    ///\brief get the view matrix (the camera)
     glm::mat4 getViewMatrix() const;
-    void      drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program, GLuint textName);
+
+    ///\brief Draws the player using the specified model, view matrix, projection matrix, program, and texture.
+    /// \param model The model to use for rendering the player
+    /// \param ViewMatrix The view matrix for the scene
+    /// \param ProjMatrix The projection matrix for the scene
+    /// \param program The shader program to use for rendering
+    /// \param textName The texture name or ID to apply to the player
+    void drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program, GLuint textName);
 };
 
+///\brief Handles camera options based on user input, such as player movement and rotation
+///\param player The player object to apply the camera options to
+///\param left Indicates whether the left movement key or button is pressed
+///\param right Indicates whether the right movement key or button is pressed
+///\param up Indicates whether the up movement key or button is pressed
+///\param down Indicates whether the down movement key or button is pressed
+///\param ctx The p6::Context object containing user input events
 void cameraOption(Player& camera, bool& left, bool& right, bool& up, bool& down, p6::Context& ctx);

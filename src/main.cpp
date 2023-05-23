@@ -123,7 +123,6 @@ int main()
     Cube cube(5.0f);
     cube.init(Texture);
 
-
     glEnable(GL_DEPTH_TEST);
 
     // calcul des differentes matrices necessaire pour les shaders
@@ -197,9 +196,23 @@ int main()
     };
 
     ctx.start();
+
+    // delete model
     perso.~Model();
     ile.~Model();
     boid.~Model();
+
+    // delete cube and obstacles
+    cube.~Cube();
+    obstacle.~Obstacle();
+
+    // delete rendering
+    camera.~Camera();
+    lightPerso.~Light();
+    lightScene.~Light();
+    ShaderCube.~Program();
+    ShaderPoint.~Program();
+    // texture ?
 
     return 0;
 }

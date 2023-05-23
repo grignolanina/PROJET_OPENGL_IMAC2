@@ -15,8 +15,13 @@ private:
     float  height;
 
 public:
-    explicit Camera(Player& player, Model& model); // constructeur par défaut
-    void update(glm::mat4& viewMatrix);            // Update les positions de la cam pour pouvoir bouger en même temps que le personnage
-};
+    /// \brief default constuctor of the camera
+    explicit Camera(Player& player, Model& model);
 
-// void cameraOption(Camera& camera, bool& left, bool& right, bool& up, bool& down, p6::Context& ctx);
+    ///\brief destructor of the camera
+    ~Camera() = default;
+
+    /// \brief update camera position to move the player in the same time
+    /// \param viewMatrix the camera
+    void update(glm::mat4& viewMatrix);
+};

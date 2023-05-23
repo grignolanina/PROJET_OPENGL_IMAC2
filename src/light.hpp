@@ -14,6 +14,9 @@ public:
     Light(glm::vec3 intensity)
         : m_intensity(intensity){};
 
+    /// \brief light destructor
+    ~Light() = default;
+
     /// \brief draw the scene light
     /// \param pos position of the light
     /// \param projMatrix matrice of projection for the shader

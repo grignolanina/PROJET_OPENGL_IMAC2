@@ -7,13 +7,6 @@
 #include "glm/fwd.hpp"
 #include "glm/trigonometric.hpp"
 
-// Program::Program(std::filesystem::path vsPath, std::filesystem::path fsPath):
-// 	m_vsPath(vsPath),
-// 	m_fsPath(fsPath),
-// 	m_program(p6::load_shader(vsPath,fsPath))
-// {
-// };
-
 void Program::addUniformVariable(const std::string& name)
 {
     GLint uName = glGetUniformLocation(getId(), name.c_str());
