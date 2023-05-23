@@ -55,9 +55,9 @@ void Boid::drawBoid(p6::Context& ctx) const
 
 void Boid::drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program& program, GLuint textName)
 {
-    glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -3.f}); // Translation
-    // // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(this->m_speed)); // Translation * Rotation
-    MVMatrixBoids = glm::translate(MVMatrixBoids, this->m_pos); // Translation * Rotation * Translation
+    glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -3.f});                        // Translation
+    MVMatrixBoids           = glm::rotate(MVMatrixBoids, glm::radians(180.0f), glm::vec3(0., 1., 0.)); // Translation * Rotation
+    MVMatrixBoids           = glm::translate(MVMatrixBoids, this->m_pos);                              // Translation * Rotation * Translation
 
     // glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, this->m_pos); // Translation
 
