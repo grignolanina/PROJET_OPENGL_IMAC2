@@ -5,7 +5,6 @@
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 
-
 class Boid {
 private:
     glm::vec3 m_pos;
@@ -41,7 +40,7 @@ public:
 
     // void drawBoid3D(Model &model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, GLint uMVPMatrix, GLint uMVMatrix, GLint uNormalMatrix,glm::mat4 viewMatrix);
 
-    void drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program& program);
+    void drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program& program, GLuint textName);
 
     /// \brief update behavior and position of all boids in the tab
     /// \param ctx the p6 context of creation

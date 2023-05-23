@@ -11,7 +11,7 @@ static constexpr float     maxForce       = 0.01f;
 static constexpr float     cohesionWeight = 0.5f;
 
 Boid::Boid()
-    : m_pos(glm::vec3(0., 0., 0.)), m_color(glm::vec3(1., 1., 1.)), m_size(0.01), m_speed(glm::vec3(0.02, 0.02, 0.02))
+    : m_pos(glm::vec3(0., 0., 0.)), m_color(glm::vec3(1., 1., 1.)), m_size(0.2), m_speed(glm::vec3(0.02, 0.02, 0.02))
 {
 }
 
@@ -23,7 +23,7 @@ Boid::Boid(glm::vec3 pos, glm::vec3 color, float size, glm::vec3 speed)
 Boid::Boid(float aspectRatio)
     : m_pos(glm::vec3{p6::random::number(-aspectRatio, aspectRatio), p6::random::number(-1, 1), p6::random::number(-2, 2)}), m_color(glm::vec3{p6::random::number(0, 1), p6::random::number(0, 1), p6::random::number(0, 1)}),
     // m_color(glm::vec3{0., 0., 1.}),
-    m_size(0.02)
+    m_size(0.2)
     , m_speed(p6::random::number(0., 0.02), p6::random::number(0., 0.02), p6::random::number(0., 0.02))
 {
 }
@@ -53,7 +53,7 @@ void Boid::drawBoid(p6::Context& ctx) const
 
 // }
 
-void Boid::drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program& program)
+void Boid::drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix, glm::mat4 viewMatrix, Program& program, GLuint textName)
 {
     glm::mat4 MVMatrixBoids = glm::translate(glm::mat4{1.f}, {0.f, 0.f, -3.f}); // Translation
     // // MVMatrixBoids = glm::rotate(MVMatrixBoids, ctx.time(), glm::normalize(this->m_speed)); // Translation * Rotation
@@ -71,7 +71,7 @@ void Boid::drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix
     // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrixBoids));
     // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-    model.drawArray();
+    model.drawArray(textName);
 }
 
 void Boid::updateBoid(p6::Context& ctx, std::vector<Boid>& boidsTab, float sRadius, float cRadius, float aRadius)
@@ -96,11 +96,13 @@ void Boid::stayInWindows(p6::Context& ctx)
     {
         m_speed.x -= 0.05;
     }
-    if(m_pos.y < m_size){
+    if (m_pos.y < m_size)
+    {
         m_speed.y += 0.05;
     }
-    if(m_pos.y > 2-m_size){
-        m_speed.y -=0.05;
+    if (m_pos.y > 2 - m_size)
+    {
+        m_speed.y -= 0.05;
     }
     if (m_pos.z < -1 + m_size)
     {

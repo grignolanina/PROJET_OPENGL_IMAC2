@@ -39,7 +39,7 @@ public:
     };
 
     /// \brief draw the model
-    void drawArray();
+    void drawArray(GLuint textName);
 
     void setRotation(float angle);
 
@@ -49,7 +49,7 @@ public:
     /// \param ProjMatrix matrice of projection for the shader
     /// \param ViewMatrix viewMatrix (camera) for the shader
     /// \param program shader will be used for drawing the model
-    void draw(glm::vec3 pos, glm::vec3 scales, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program);
+    void draw(glm::vec3 pos, glm::vec3 scales, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program, GLuint textName);
 
     /// \brief get the ibo of the model
     // GLuint getIbo() const{

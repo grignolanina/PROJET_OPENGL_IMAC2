@@ -138,7 +138,7 @@ void cameraOption(Player& player, bool& left, bool& right, bool& up, bool& down,
     };
 }
 
-void Player::drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program)
+void Player::drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program, GLuint textName)
 {
     // glm::mat4 ViewMatrix = camera->getViewMatrix();
     ViewMatrix = glm::translate(ViewMatrix, m_Position);
@@ -148,9 +148,10 @@ void Player::drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix
     ViewMatrix             = glm::scale(ViewMatrix, glm::vec3(0.2, 0.2, 0.2));
     glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrix));
 
+    program.uniform1i("uText", 0);
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrix);
     program.uniformMatrix4fv("uMVMatrix", ViewMatrix);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
 
-    model.drawArray();
+    model.drawArray(textName);
 }

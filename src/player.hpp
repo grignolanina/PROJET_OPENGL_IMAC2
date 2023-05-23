@@ -52,7 +52,7 @@ public:
     void rotateUp(float degrees);   // modifie la rotation de la cam axe vertical
 
     glm::mat4 getViewMatrix() const;
-    void      drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program);
+    void      drawPlayer(Model& model, glm::mat4 ViewMatrix, glm::mat4 ProjMatrix, Program& program, GLuint textName);
 };
 
 void cameraOption(Player& camera, bool& left, bool& right, bool& up, bool& down, p6::Context& ctx);

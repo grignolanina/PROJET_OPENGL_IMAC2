@@ -48,7 +48,10 @@ int main()
     Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
     Program ShaderCube("shaders/2Dnuages.vs.glsl", "shaders/2Dnuages.fs.glsl");
 
-    img::Image Texture = p6::load_image_buffer("assets/textures/nuages.jpg");
+    img::Image Texture    = p6::load_image_buffer("assets/textures/nuages.jpg");
+    img::Image img_ile    = p6::load_image_buffer("assets/textures/textureIleBlake.png");
+    img::Image img_perso  = p6::load_image_buffer("assets/textures/persoBake.jpg");
+    img::Image img_oiseau = p6::load_image_buffer("assets/textures/oiseauBake.jpg");
 
     ShaderPoint.addUniformVariable("uMVPMatrix");
     ShaderPoint.addUniformVariable("uMVMatrix");
@@ -60,6 +63,7 @@ int main()
     ShaderPoint.addUniformVariable("uLightIntensity");
     ShaderPoint.addUniformVariable("uLightPos2_vs");
     ShaderPoint.addUniformVariable("uLightIntensity2");
+    ShaderPoint.addUniformVariable("uText");
 
     ShaderText.addUniformVariable("uMVPMatrix");
     ShaderText.addUniformVariable("uMVMatrix");
@@ -74,9 +78,36 @@ int main()
     Model perso = Model();
     Model ile   = Model();
     Model boid  = Model();
-    perso.loadModel("perso.obj");
-    ile.loadModel("ile.obj");
-    boid.loadModel("oiseau.obj");
+    perso.loadModel("persoBake.obj");
+    ile.loadModel("ileBake.obj");
+    boid.loadModel("oiseauBake.obj");
+
+    GLuint persoBake;
+    glGenTextures(1, &persoBake);
+    glBindTexture(GL_TEXTURE_2D, persoBake);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_perso.width(), img_perso.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_perso.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    GLuint oiseauBake;
+    glGenTextures(1, &oiseauBake);
+    glBindTexture(GL_TEXTURE_2D, oiseauBake);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_oiseau.width(), img_oiseau.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_oiseau.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    GLuint ileBake;
+    glGenTextures(1, &ileBake);
+    glBindTexture(GL_TEXTURE_2D, ileBake);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_ile.width(), img_ile.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_ile.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     perso.setVbo();
     ile.setVbo();
@@ -86,40 +117,8 @@ int main()
     ile.setVao();
     boid.setVao();
     Cube cube(5.0f, Texture);
-    // GLint uTextTerre = glGetUniformLocation(Shader.id(), "uTextTerre");
-    // GLint uTextMoon = glGetUniformLocation(Shader.id(), "uTextMoon");
 
     glEnable(GL_DEPTH_TEST);
-
-    // initialisation de textures
-    //  GLuint textureTerre;
-    //  glGenTextures(1, &textureTerre);
-    //  glBindTexture(GL_TEXTURE_2D, textureTerre);
-
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_terre.width(), img_terre.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_terre.data());
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // glBindTexture(GL_TEXTURE_2D, 0);
-
-    // GLuint textureMoon;
-    // glGenTextures(1, &textureMoon);
-    // glBindTexture(GL_TEXTURE_2D, textureMoon);
-
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_lune.width(), img_lune.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img_lune.data());
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // glBindTexture(GL_TEXTURE_2D, 0);
-
-    // const GLuint VERTEX_ATTR_POSITION = 0;
-    // const GLuint VERTEX_ATTR_NORM     = 1;
-    // const GLuint VERTEX_ATTR_UV       = 2;
-    // glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    // glEnableVertexAttribArray(VERTEX_ATTR_NORM);
-    // glEnableVertexAttribArray(VERTEX_ATTR_UV);
-
-    // glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, position)));
-    // glVertexAttribPointer(VERTEX_ATTR_NORM, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, normal)));
-    // glVertexAttribPointer(VERTEX_ATTR_UV, 2, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, texCoords)));
 
     // calcul des differentes matrices necessaire pour les shaders
     glm::mat4 ProjMatrix;
@@ -158,11 +157,10 @@ int main()
         lightScene.drawLightScene(glm::vec3(-3., 6., -5.), ProjMatrix, viewMatrix, ShaderPoint);
         lightPerso.drawLightPlayer(player.getPosition(), ProjMatrix, viewMatrix, ShaderPoint);
 
-        player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
-        // player.drawPlayer(perso, viewMatrix,ProjMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix, uLightPos_vs, uLightIntensity, uKs, uKd, uShininess);
+        player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint, persoBake);
 
-        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint);
-        player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
+        ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint, ileBake);
+        // player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
         ShaderCube.use();
         cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
@@ -181,7 +179,7 @@ int main()
         for (int i = 0; i < nbBoids; i++)
         {
             // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
-            boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, viewMatrix, ShaderText);
+            boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, viewMatrix, ShaderText, oiseauBake);
 
             // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 

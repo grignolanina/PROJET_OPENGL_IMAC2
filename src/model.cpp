@@ -7,10 +7,10 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-void Model::drawArray()
+void Model::drawArray(GLuint textName)
 {
     glBindVertexArray(m_vao);
-    // glBindTexture(GL_TEXTURE_2D, m_texture.getTextureId());
+    glBindTexture(GL_TEXTURE_2D, textName);
     // if(m_isIbo){
     //     glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT,0);
     // }
@@ -19,27 +19,27 @@ void Model::drawArray()
     // }
 }
 
-void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program)
+void Model::draw(glm::vec3 pos, glm::vec3 scale, glm::mat4 ProjMatrix, glm::mat4 ViewMatrix, Program& program, GLuint textName)
 {
     glm::mat4 ViewMatrixModel = glm::translate(glm::mat4(1.0), pos);
     ViewMatrixModel           = glm::scale(ViewMatrixModel, scale);
     ViewMatrixModel           = ViewMatrix * ViewMatrixModel;
 
     glm::mat4 NormalMatrix = glm::transpose(glm::inverse(ViewMatrixModel));
-
+    program.uniform1i("uText", 0);
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * ViewMatrixModel);
     program.uniformMatrix4fv("uMVMatrix", ViewMatrixModel);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
 
     // les params de lights sont définies avant
 
-    this->drawArray();
+    this->drawArray(textName);
 }
 
 void Model::setVbo()
 {
-    GLuint vbo;
-    m_vbo = vbo;
+    GLuint vbo = 0;
+    m_vbo      = vbo;
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, getVertexCount() * sizeof(glimac::ShapeVertex), getDataPointer(), GL_STATIC_DRAW);
@@ -65,8 +65,8 @@ void Model::setRotation(float angle)
 
 void Model::setVao()
 {
-    GLuint vao;
-    m_vao = vao;
+    GLuint vao = 0;
+    m_vao      = vao;
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
     // if(m_isIbo){
