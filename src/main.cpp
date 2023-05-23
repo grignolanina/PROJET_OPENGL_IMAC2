@@ -14,6 +14,7 @@
 #include "p6/p6.h"
 #include "player.hpp"
 #include "program.hpp"
+#include "texture.hpp"
 
 int main()
 {
@@ -45,7 +46,7 @@ int main()
 
     //  //nouveau set
     Program ShaderPoint("shaders/3D.vs.glsl", "shaders/multiplePointLight.fs.glsl");
-    Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
+    // Program ShaderText("shaders/3D.vs.glsl", "shaders/3Dboids.fs.glsl");
     Program ShaderCube("shaders/2Dnuages.vs.glsl", "shaders/2Dnuages.fs.glsl");
 
     img::Image Texture    = p6::load_image_buffer("assets/textures/nuages.jpg");
@@ -65,12 +66,11 @@ int main()
     ShaderPoint.addUniformVariable("uLightIntensity2");
     ShaderPoint.addUniformVariable("uText");
 
-    ShaderText.addUniformVariable("uMVPMatrix");
-    ShaderText.addUniformVariable("uMVMatrix");
-    ShaderText.addUniformVariable("uNormalMatrix");
+    // ShaderText.addUniformVariable("uMVPMatrix");
+    // ShaderText.addUniformVariable("uMVMatrix");
+    // ShaderText.addUniformVariable("uNormalMatrix");
 
     ShaderCube.addUniformVariable("uTexture");
-    // ShaderCube.addUniformVariable("uModelMatrix");
     ShaderCube.addUniformVariable("uMVPMatrix");
     ShaderCube.addUniformVariable("uMVMatrix");
     ShaderCube.addUniformVariable("uNormalMatrix");
@@ -83,6 +83,10 @@ int main()
     boid.loadModel("oiseauBake.obj");
 
     GLuint persoBake;
+
+    // TextureObj textPerso(persoBake, img_perso);
+    // textPerso.configTex();
+
     glGenTextures(1, &persoBake);
     glBindTexture(GL_TEXTURE_2D, persoBake);
 
@@ -135,7 +139,7 @@ int main()
     bool   down  = false;
     // bool jump = false; //pas géré
 
-    Light lightScene = Light(glm::vec3{30.});
+    Light lightScene = Light(glm::vec3{90.});
     Light lightPerso = Light(glm::vec3{0.01});
     ctx.update       = [&]() {
         // ctx.background(p6::NamedColor::Blue);
@@ -154,13 +158,12 @@ int main()
         MVMatrix     = viewMatrix * MVMatrix;
         NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
-        lightScene.drawLightScene(glm::vec3(-3., 6., -5.), ProjMatrix, viewMatrix, ShaderPoint);
+        lightScene.drawLightScene(glm::vec3(-4., 5., -8.), ProjMatrix, viewMatrix, ShaderPoint);
         lightPerso.drawLightPlayer(player.getPosition(), ProjMatrix, viewMatrix, ShaderPoint);
 
         player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint, persoBake);
 
         ile.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ProjMatrix, viewMatrix, ShaderPoint, ileBake);
-        // player.drawPlayer(perso, viewMatrix, ProjMatrix, ShaderPoint);
 
         ShaderCube.use();
         cube.draw(glm::vec3(0., -5., -5.), glm::vec3{5.}, ShaderCube, viewMatrix, ProjMatrix);
@@ -174,33 +177,20 @@ int main()
         ImGui::SliderFloat("Alignement", &aRadius, 0.f, 0.5f, "%.3f", 0);
         ImGui::End();
 
-        ShaderText.use();
+        ShaderPoint.use();
 
         for (int i = 0; i < nbBoids; i++)
         {
-            // boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, uMVPMatrix, uMVMatrix, uNormalMatrix,viewMatrix);
-            boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, viewMatrix, ShaderText, oiseauBake);
-
-            // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+            boidsTab[i].drawBoid3D(boid, ProjMatrix, NormalMatrix, viewMatrix, ShaderPoint, oiseauBake);
 
             boidsTab[i].updateBoid(ctx, boidsTab, sRadius, cRadius, aRadius);
         }
-
-        // debind vao
-        glBindVertexArray(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
     };
 
     ctx.start();
     perso.~Model();
+    ile.~Model();
+    boid.~Model();
 
     return 0;
-
-    // Should be done last. It starts the infinite loop.
 }
-
-// TEST_CASE("Addition is commutative")
-// {
-//     CHECK(1 + 2 == 2 + 1);
-//     CHECK(4 + 7 == 7 + 4);
-// }

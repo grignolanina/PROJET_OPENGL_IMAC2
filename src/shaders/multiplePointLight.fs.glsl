@@ -10,10 +10,6 @@ vec2 fCorrectCoords;
 out vec4 fFragColor;
 
 uniform sampler2D uText;
-// uniform sampler2D uTextMoon;
-
-// uniform sampler2D uTexture1;
-// uniform sampler2D uTexture2;
 
 uniform vec3 uKd;
 uniform vec3 uKs;
@@ -35,21 +31,20 @@ vec3 blinnPhong(vec3 uLightPos_vs, vec3 uLightIntensity){
 
 
 void main() {    
-    vec3 color = vec3(0.0, 0.0, 0.0);
 
-    vec4 texture = texture(uText, vTexCoords);
-    
+  
     // Calcul de la première lumière
     vec3 light1 = blinnPhong(uLightPos_vs, uLightIntensity);
-    color += light1;
+    vec3 color = light1;
     
-    // Calcul de la deuxième lumière
+      // Calcul de la deuxième lumière
     vec3 light2 = blinnPhong(uLightPos2_vs, uLightIntensity2);
     color += light2;
-    
-    // fFragColor = vec4(color, 1.0);
-    fFragColor = vec4(color, 1.0)*texture;
 
-	// fFragColor = vec4(blinnPhong(),1.);
-	
+    
+    // Application de la texture
+    vec4 texture = texture(uText, vTexCoords);
+    
+    
+    fFragColor = vec4(color, 1.0)*texture;	
 }

@@ -64,6 +64,7 @@ void Boid::drawBoid3D(Model& model, glm::mat4 ProjMatrix, glm::mat4 NormalMatrix
     MVMatrixBoids = glm::scale(MVMatrixBoids, glm::vec3{this->m_size}); // Translation * Rotation * Translation * Scale
     MVMatrixBoids = viewMatrix * MVMatrixBoids;
 
+    program.uniform1i("uText", 0);
     program.uniformMatrix4fv("uMVPMatrix", ProjMatrix * MVMatrixBoids);
     program.uniformMatrix4fv("uMVMatrix", MVMatrixBoids);
     program.uniformMatrix4fv("uNormalMatrix", NormalMatrix);
