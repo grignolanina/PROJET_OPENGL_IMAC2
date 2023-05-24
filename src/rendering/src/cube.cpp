@@ -204,12 +204,20 @@ void Cube::borders(Player& player)
     float maxX = m_size / 1.5f;
     float minZ = -m_size * 2;
     float maxZ = m_size / 6.5f;
+    float minY = -m_size / 5.f;
+    float maxY = m_size / 5.f;
 
     // Vérifier la coordonnée X
     if (playerPosition.x < minX)
         player.setPosition(glm::vec3(minX, playerPosition.y, playerPosition.z));
     else if (playerPosition.x > maxX)
         player.setPosition(glm::vec3(maxX, playerPosition.y, playerPosition.z));
+
+        // Vérifier la coordonnée X
+    if (playerPosition.y < minY)
+        player.setPosition(glm::vec3(playerPosition.x, minY, playerPosition.z));
+    else if (playerPosition.y > maxY)
+        player.setPosition(glm::vec3(playerPosition.x, maxY, playerPosition.z));
 
     // Vérifier la coordonnée Z
     if (playerPosition.z < minZ)
