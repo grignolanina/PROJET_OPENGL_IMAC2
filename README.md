@@ -1,6 +1,6 @@
 # OpenGL project
 
-This is a student project realised at the French engineering school IMAC, for the third semester for object programming and image synthesis. This work focused on the application of different notions studied during these two courses.
+This is a student project realised at the French engineering school IMAC, for the fourth semester for object programming and image synthesis. This work focused on the application of different notions studied during these two courses.
 
 
 Object programming: coding cleanly
