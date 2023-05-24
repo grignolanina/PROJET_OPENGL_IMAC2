@@ -1,17 +1,48 @@
+# OpenGL project
+
+This is a student project realised at the French engineering school IMAC, for the third semester for object programming and image synthesis. This work focused on the application of different notions studied during these two courses.
+
+
+Object programming: coding cleanly
+
+
+Synthesis of images: modeling, texturing, lightning, use of shaders, etc.
+
+## Additional info
+### Library 
+
+For load 3D model, we use tinyobjloader. This library is available on this link : (https://github.com/tinyobjloader/tinyobjloader)
+### Authors
+
+GRIGNOLA Nina
+
+APALOO-KINGSLOVE Keziah
+
+### Template use
+
+For this project, we used a template created by Jules Fouchy. It is a template created to facilitate development in OpenGL with its P6 library. The rest of this READ ME is his. It explains how to use the template and therefore compile the project:
+
+
 # OpenGL TPs Template
 
 This template will help you follow the lessons from [this OpenGL class](https://julesfouchy.github.io/Learn--OpenGL/).
 
 **It works on all platforms (Windows, Linux, MacOS).**
 
-- [Setting up](#setting-up)
-  - [Creating a repository](#creating-a-repository)
-  - [Downloading your repository](#downloading-your-repository)
-  - [Compiling](#compiling)
-- [Coding](#coding)
-  - [Folder structure](#folder-structure)
-  - [Switching exercise](#switching-exercise)
-  - [Adding an exercise folder](#adding-an-exercise-folder)
+- [OpenGL project](#opengl-project)
+  - [Additional info](#additional-info)
+    - [Library](#library)
+    - [Authors](#authors)
+    - [Template use](#template-use)
+- [OpenGL TPs Template](#opengl-tps-template)
+  - [Setting up](#setting-up)
+    - [Creating a repository](#creating-a-repository)
+    - [Downloading your repository](#downloading-your-repository)
+    - [Compiling](#compiling)
+  - [Coding](#coding)
+    - [Folder structure](#folder-structure)
+    - [Switching exercise](#switching-exercise)
+    - [Adding an exercise folder](#adding-an-exercise-folder)
 
 ## Setting up
 
